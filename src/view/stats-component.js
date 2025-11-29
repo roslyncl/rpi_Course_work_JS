@@ -1,6 +1,7 @@
 import { createElement } from '../framework/render.js';
 
 function createStatsComponentTemplate(stats) {
+  
   return (
     `<div class="stats">
       <h3>Статистика</h3>

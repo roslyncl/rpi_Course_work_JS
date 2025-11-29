@@ -8,212 +8,52 @@
 </head>
 
 <body>
-    <header>
+    <!-- Добавляем класс для поиска в JS -->
+    <header class="app-header">
         <h1>Менеджер подписок и сервисов</h1>
     </header>
 
     <main>
-        <div class="sidebar">
+        <!-- Добавляем класс для поиска в JS -->
+        <div class="sidebar sidebar-section">
             <div class="filters">
                 <h2>Фильтры</h2>
                 
                 <div class="filter-group">
                     <h3>Тип подписки</h3>
-                    <label><input type="checkbox" checked> Стриминг</label>
-                    <label><input type="checkbox" checked> Музыка</label>
-                    <label><input type="checkbox" checked> ПО</label>
-                    <label><input type="checkbox" checked> Игры</label>
-                    <label><input type="checkbox" checked> Другое</label>
+                    <!-- Добавляем value для корректной работы фильтров -->
+                    <label><input type="checkbox" value="Стриминг" checked> Стриминг</label>
+                    <label><input type="checkbox" value="Музыка" checked> Музыка</label>
+                    <label><input type="checkbox" value="ПО" checked> ПО</label>
+                    <label><input type="checkbox" value="Игры" checked> Игры</label>
+                    <label><input type="checkbox" value="Другое" checked> Другое</label>
                 </div>
                 
                 <div class="filter-group">
                     <h3>Стоимость</h3>
-                    <input type="range" min="0" max="5000" value="2000">
+                    <input type="range" class="price-slider" min="1" max="5000" value="2000">
                     <div class="range-values">
-                        <div class="min-value">0 ₽</div>
-                        <div class="max-value">5 000 ₽</div>
+                        <div class="min-value">1 ₽</div>
+                        <div class="max-value">2 000 ₽</div>
                     </div>
                 </div>
             </div>
             
+            <!-- Статистика будет генерироваться JavaScript -->
             <div class="stats">
-                <h3>Статистика</h3>
-                <div class="stat-item">
-                    <div class="stat-label">Всего подписок:</div>
-                    <div class="stat-value">4</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Общая стоимость:</div>
-                    <div class="stat-value">2 450 ₽/мес</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">Экономия:</div>
-                    <div class="stat-value">1 800 ₽/мес</div>
-                </div>
+                <!-- JavaScript вставит сюда динамическую статистику -->
             </div>
         </div>
 
-        <div class="main-content">
-            <div class="subscriptions-section">
-                <div class="section-header">
-                    <h2>Мои подписки</h2>
-                    <button class="add-btn">+ Добавить подписку</button>
-                </div>
-                
-                <div class="subscriptions-list">
-                    <div class="subscription-item">
-                        <div class="sub-header">
-                            <div class="sub-name">Netflix</div>
-                            <div class="sub-price">599 ₽</div>
-                        </div>
-                        <div class="sub-details">Премиум подписка</div>
-                        <div class="sub-footer">
-                            <div class="sub-type">Стриминг</div>
-                            <div class="sub-due">Через 5 дней</div>
-                        </div>
-                    </div>
-
-                    <div class="subscription-item">
-                        <div class="sub-header">
-                            <div class="sub-name">Spotify</div>
-                            <div class="sub-price">169 ₽</div>
-                        </div>
-                        <div class="sub-details">Индивидуальная подписка</div>
-                        <div class="sub-footer">
-                            <div class="sub-type">Музыка</div>
-                            <div class="sub-due">Через 12 дней</div>
-                        </div>
-                    </div>
-
-                    <div class="subscription-item">
-                        <div class="sub-header">
-                            <div class="sub-name">YouTube Premium</div>
-                            <div class="sub-price">379 ₽</div>
-                        </div>
-                        <div class="sub-details">Без рекламы</div>
-                        <div class="sub-footer">
-                            <div class="sub-type">Видео</div>
-                            <div class="sub-due">Через 8 дней</div>
-                        </div>
-                    </div>
-
-                    <div class="subscription-item">
-                        <div class="sub-header">
-                            <div class="sub-name">Adobe</div>
-                            <div class="sub-price">1 499 ₽</div>
-                        </div>
-                        <div class="sub-details">Все приложения</div>
-                        <div class="sub-footer">
-                            <div class="sub-type">ПО</div>
-                            <div class="sub-due">Через 3 дня</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="horizontal-blocks">
-                <div class="notifications-section">
-                    <h2>Ближайшие платежи</h2>
-                    
-                    <div class="notifications-list">
-                        <div class="notification-item">
-                            <div class="notif-icon">⚠️</div>
-                            <div class="notif-content">
-                                <div class="notif-title">Adobe</div>
-                                <div class="notif-text">1 499 ₽ через 3 дня</div>
-                            </div>
-                        </div>
-
-                        <div class="notification-item">
-                            <div class="notif-icon">⚠️</div>
-                            <div class="notif-content">
-                                <div class="notif-title">Netflix</div>
-                                <div class="notif-text">599 ₽ через 5 дней</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recommendations-section">
-                    <h2>Рекомендации</h2>
-                    
-                    <div class="recommendations-list">
-                        <div class="recommendation-item">
-                            <div class="rec-header">
-                                <div class="rec-name">Okko вместо Netflix</div>
-                                <div class="rec-savings">-300 ₽</div>
-                            </div>
-                            <div class="rec-details">Похожий контент, выгоднее</div>
-                        </div>
-
-                        <div class="recommendation-item">
-                            <div class="rec-header">
-                                <div class="rec-name">Figma вместо Adobe</div>
-                                <div class="rec-savings">Бесплатно</div>
-                            </div>
-                            <div class="rec-details">Бесплатный план для проектов</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="analytics-section">
-                <h2>Анализ затрат</h2>
-                
-                <div class="analytics-content">
-                    <div class="chart-container">
-                        <div class="pie-chart">
-                            <div class="chart-visual">
-                                <div class="pie-slice streaming" style="--percentage: 35;"></div>
-                                <div class="pie-slice music" style="--percentage: 15;"></div>
-                                <div class="pie-slice software" style="--percentage: 45;"></div>
-                                <div class="pie-slice other" style="--percentage: 5;"></div>
-                                <div class="chart-center"></div>
-                            </div>
-                            <div class="chart-title">Распределение по категориям</div>
-                        </div>
-                        
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <div class="legend-color streaming"></div>
-                                <div class="legend-text">Стриминг - 599 ₽ (35%)</div>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color music"></div>
-                                <div class="legend-text">Музыка - 169 ₽ (15%)</div>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color software"></div>
-                                <div class="legend-text">ПО - 1 499 ₽ (45%)</div>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color other"></div>
-                                <div class="legend-text">Другое - 379 ₽ (5%)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="analytics-stats">
-                        <div class="analytics-stat-item">
-                            <div class="stat-value">2 450 ₽</div>
-                            <div class="stat-label">В месяц</div>
-                        </div>
-                        <div class="analytics-stat-item">
-                            <div class="stat-value">29 400 ₽</div>
-                            <div class="stat-label">В год</div>
-                        </div>
-                        <div class="analytics-stat-item">
-                            <div class="stat-value highlight">-1800 ₽</div>
-                            <div class="stat-label">Экономия с альтернативами</div>
-                        </div>
-                        <div class="analytics-stat-item">
-                            <div class="stat-value">18%</div>
-                            <div class="stat-label">От общего бюджета</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Добавляем класс для поиска в JS -->
+        <div class="main-content main-content-section">
+            <!-- ВСЁ ЭТО СОДЕРЖИМОЕ БУДЕТ ЗАМЕНЕНО JavaScript -->
+            <!-- Удаляем статический контент или оставляем как fallback -->
+            
         </div>
     </main>
+
+    <!-- Подключаем JavaScript -->
+    <script type="module" src="main.js"></script>
 </body>
 </html>

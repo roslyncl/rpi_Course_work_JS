@@ -1,7 +1,10 @@
 import { createElement } from '../framework/render.js';
 
 function createAnalyticsComponentTemplate(analytics) {
-  const { categories } = analytics;
+  const { categories, totalCost, yearlyCost, savings, budgetPercentage } = analytics;
+  
+  // Динамически генерируем секции для круговой диаграммы
+  const pieSlices = generatePieSlices(categories);
   
   return (
     `<div class="analytics-section">
@@ -11,10 +14,7 @@ function createAnalyticsComponentTemplate(analytics) {
         <div class="chart-container">
           <div class="pie-chart">
             <div class="chart-visual">
-              <div class="pie-slice streaming" style="--percentage: 35;"></div>
-              <div class="pie-slice music" style="--percentage: 15;"></div>
-              <div class="pie-slice software" style="--percentage: 45;"></div>
-              <div class="pie-slice other" style="--percentage: 5;"></div>
+              ${pieSlices}
               <div class="chart-center"></div>
             </div>
             <div class="chart-title">Распределение по категориям</div>
@@ -32,25 +32,72 @@ function createAnalyticsComponentTemplate(analytics) {
 
         <div class="analytics-stats">
           <div class="analytics-stat-item">
-            <div class="stat-value">2 450 ₽</div>
+            <div class="stat-value">${totalCost || '2 450 ₽'}</div>
             <div class="stat-label">В месяц</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value">29 400 ₽</div>
+            <div class="stat-value">${yearlyCost || '29 400 ₽'}</div>
             <div class="stat-label">В год</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value highlight">-1800 ₽</div>
+            <div class="stat-value highlight">${savings || '-1800 ₽'}</div>
             <div class="stat-label">Экономия с альтернативами</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value">18%</div>
+            <div class="stat-value">${budgetPercentage || '18%'}</div>
             <div class="stat-label">От общего бюджета</div>
           </div>
         </div>
       </div>
     </div>`
   );
+}
+
+function generatePieSlices(categories) {
+  console.log('🎨 Raw categories:', categories);
+  
+  if (!categories || categories.length === 0) {
+    return '';
+  }
+
+  let gradientStops = [];
+  let currentPercent = 0;
+
+  categories.forEach((category, index) => {
+    const percentage = category.percentage || 0;
+    
+    // Передаем процент для регулировки насыщенности
+    const color = getCategoryColor(category.name, percentage);
+    
+    const startPercent = currentPercent;
+    const endPercent = currentPercent + percentage;
+    
+    console.log(`🎨 Segment ${index}: ${category.name} ${percentage}% -> ${color}`);
+    
+    gradientStops.push(`${color} ${startPercent}% ${endPercent}%`);
+    currentPercent = endPercent;
+  });
+
+  const gradientString = gradientStops.join(', ');
+  return `
+    <div class="chart-visual" style="--chart-gradient: ${gradientString};">
+      <div class="chart-center"></div>
+    </div>
+  `;
+}
+
+function getCategoryColor(categoryType, percentage) {
+  // Базовый фиолетовый в HSL
+  const baseHue = 270; // Фиолетовый оттенок
+  
+  // Регулируем насыщенность и яркость в зависимости от процента
+  const saturation = 40 + (percentage / 100) * 50; // 40% - 90%
+  const lightness = 85 - (percentage / 100) * 40;  // 85% - 45% (чем больше %, тем темнее)
+  
+  const color = `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
+  console.log(`🎨 ${categoryType} ${percentage}% -> hsl(${baseHue}, ${saturation}%, ${lightness}%)`);
+  
+  return color;
 }
 
 export default class AnalyticsComponent {

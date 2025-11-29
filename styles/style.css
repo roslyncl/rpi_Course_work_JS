@@ -385,12 +385,37 @@ main {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    background: conic-gradient(
-        #8b5cf6 0% 35%,
-        #a78bfa 35% 50%,
-        #c4b5fd 50% 95%,
-        #ddd6fe 95% 100%
-    );
+    position: relative;
+    background: conic-gradient(var(--chart-gradient)) !important;
+    background-image: conic-gradient(var(--chart-gradient)) !important;
+}
+
+.pie-slice {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 50% 100%, 50% 50%);
+    transform-origin: center;
+    transform: rotate(calc(var(--start, 0) * 1deg));
+}
+
+.pie-slice.streaming { background: #8b5cf6; }
+.pie-slice.music { background: #a78bfa; }
+.pie-slice.software { background: #c4b5fd; }
+.pie-slice.other { background: #ddd6fe; }
+.pie-slice.video { background: #7e57c2; }
+.pie-slice.games { background: #5e35b1; }
+
+.chart-center {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    background: white;
+    border-radius: 50%;
+    z-index: 2;
 }
 
 .chart-title {
@@ -425,6 +450,8 @@ main {
 .legend-color.music { background: #a78bfa; }
 .legend-color.software { background: #c4b5fd; }
 .legend-color.other { background: #ddd6fe; }
+.legend-color.video { background: #7e57c2; }
+.legend-color.games { background: #5e35b1; }
 
 .analytics-stats {
     display: grid;
