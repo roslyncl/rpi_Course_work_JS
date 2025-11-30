@@ -14,10 +14,20 @@ function createSubscriptionsListComponentTemplate() {
     );
 }
 
+function createEmptyStateTemplate() {
+    return (
+        `<div class="empty-state">
+            <div class="empty-state-title">Подписок пока нет</div>
+            <div class="empty-state-text">Добавьте свою первую подписку, чтобы начать отслеживать расходы</div>
+        </div>`
+    );
+}
+
 export default class SubscriptionsListComponent extends AbstractComponent {
-    constructor() {
+    constructor(subscriptions = []) {
         super();
         this.addButtonComponent = null;
+        this.subscriptions = subscriptions;
     }
 
     get template() {
@@ -26,6 +36,7 @@ export default class SubscriptionsListComponent extends AbstractComponent {
 
     afterElementCreate() {
         this.renderAddButton();
+        this.renderSubscriptionsList();
     }
 
     renderAddButton() {
@@ -34,5 +45,29 @@ export default class SubscriptionsListComponent extends AbstractComponent {
             this.addButtonComponent = new AddSubscriptionBtnComponent();
             render(this.addButtonComponent, addButtonContainer);
         }
+    }
+
+    renderSubscriptionsList() {
+        const subscriptionsList = this.element.querySelector('.subscriptions-list');
+        
+        if (this.subscriptions.length === 0) {
+            subscriptionsList.innerHTML = createEmptyStateTemplate();
+        } else {
+            // Здесь будет рендеринг подписок (через presenter)
+            subscriptionsList.innerHTML = ''; // Очищаем для будущих подписок
+        }
+    }
+
+    updateSubscriptions(subscriptions) {
+        this.subscriptions = subscriptions;
+        this.renderSubscriptionsList();
+    }
+
+    removeElement() {
+        if (this.addButtonComponent) {
+            this.addButtonComponent.removeElement();
+            this.addButtonComponent = null;
+        }
+        super.removeElement();
     }
 }

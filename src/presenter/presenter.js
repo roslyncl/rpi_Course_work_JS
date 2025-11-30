@@ -20,6 +20,7 @@ export default class SubscriptionPresenter {
     types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
     maxPrice: 5000
   };
+  #subscriptionsListComponent = null; // Добавляем ссылку на компонент
 
   constructor({ 
     headerContainer, 
@@ -34,21 +35,21 @@ export default class SubscriptionPresenter {
   }
 
   init() {
-    this.#renderHeader();
-    this.#renderSidebar();
-    this.#renderMainContent();
+    this.renderHeader();
+    this.renderSidebar();
+    this.renderMainContent();
   }
 
-  #renderHeader() {
+  renderHeader() {
     const headerComponent = new HeaderComponent();
     render(headerComponent, this.#headerContainer);
   }
 
-  #renderSidebar() {
+  renderSidebar() {
     // Рендерим фильтры
     const filtersComponent = new FiltersComponent({
       filters: this.#currentFilters,
-      onFiltersChange: this.#handleFiltersChange.bind(this)
+      onFiltersChange: this.handleFiltersChange.bind(this)
     });
     render(filtersComponent, this.#sidebarContainer);
 
@@ -58,56 +59,56 @@ export default class SubscriptionPresenter {
     render(statsComponent, this.#sidebarContainer);
   }
 
-#renderMainContent() {
-  this.#mainContentContainer.innerHTML = '';
-  
-  this.#renderSubscriptions();
-  this.#renderHorizontalBlocks();
-  this.#renderAnalytics();
-  this.#setupEventHandlers();
-}
+  renderMainContent() {
+    this.#mainContentContainer.innerHTML = '';
+    
+    this.renderSubscriptions();
+    this.renderHorizontalBlocks();
+    this.renderAnalytics();
+    this.setupEventHandlers();
+  }
 
-  #renderSubscriptions() {
-    // Создаем контейнер для списка подписок
-    const subscriptionsSection = document.createElement('div');
-    subscriptionsSection.className = 'subscriptions-section';
-    
-    const sectionHeader = document.createElement('div');
-    sectionHeader.className = 'section-header';
-    sectionHeader.innerHTML = `
-      <h2>Мои подписки</h2>
-      <button class="add-btn">+ Добавить подписку</button>
-    `;
-    
-    const subscriptionsList = document.createElement('div');
-    subscriptionsList.className = 'subscriptions-list';
-    
-    subscriptionsSection.appendChild(sectionHeader);
-    subscriptionsSection.appendChild(subscriptionsList);
-    this.#mainContentContainer.appendChild(subscriptionsSection);
-
-    // Рендерим подписки
+  renderSubscriptions() {
     const subscriptions = this.#subscriptionModel.getSubscriptions(this.#currentFilters);
+    
+    // Создаем компонент списка подписок
+    this.#subscriptionsListComponent = new SubscriptionsListComponent(subscriptions);
+    render(this.#subscriptionsListComponent, this.#mainContentContainer);
+
+    // Если есть подписки - рендерим их
+    if (subscriptions.length > 0) {
+      this.renderSubscriptionItems();
+    }
+  }
+
+  // Новый метод для рендеринга элементов подписок
+  renderSubscriptionItems() {
+    const subscriptionsList = this.#mainContentContainer.querySelector('.subscriptions-list');
+    const subscriptions = this.#subscriptionModel.getSubscriptions(this.#currentFilters);
+    
+    // Очищаем список перед рендером
+    subscriptionsList.innerHTML = '';
     
     subscriptions.forEach(subscription => {
       const subscriptionComponent = new SubscriptionItemComponent({ 
         subscription,
-        onRemove: () => this.#handleRemoveSubscription(subscription.id)
+        onEdit: () => this.handleEditSubscription(subscription),
+        onDelete: () => this.handleRemoveSubscription(subscription.id)
       });
       render(subscriptionComponent, subscriptionsList);
     });
   }
 
-  #renderHorizontalBlocks() {
+  renderHorizontalBlocks() {
     const horizontalBlocksContainer = document.createElement('div');
     horizontalBlocksContainer.className = 'horizontal-blocks';
     this.#mainContentContainer.appendChild(horizontalBlocksContainer);
 
-    this.#renderNotifications(horizontalBlocksContainer);
-    this.#renderRecommendations(horizontalBlocksContainer);
+    this.renderNotifications(horizontalBlocksContainer);
+    this.renderRecommendations(horizontalBlocksContainer);
   }
 
-  #renderNotifications(container) {
+  renderNotifications(container) {
     const notificationsSection = document.createElement('div');
     notificationsSection.className = 'notifications-section';
     notificationsSection.innerHTML = '<h2>Ближайшие платежи</h2>';
@@ -126,7 +127,7 @@ export default class SubscriptionPresenter {
     });
   }
 
-  #renderRecommendations(container) {
+  renderRecommendations(container) {
     const recommendationsSection = document.createElement('div');
     recommendationsSection.className = 'recommendations-section';
     recommendationsSection.innerHTML = '<h2>Рекомендации</h2>';
@@ -145,7 +146,7 @@ export default class SubscriptionPresenter {
     });
   }
 
-  #renderAnalytics() {
+  renderAnalytics() {
     const analyticsSection = document.createElement('div');
     analyticsSection.className = 'analytics-section';
     this.#mainContentContainer.appendChild(analyticsSection);
@@ -157,12 +158,12 @@ export default class SubscriptionPresenter {
 
   // === ОБРАБОТЧИКИ СОБЫТИЙ ===
 
-  #handleFiltersChange(newFilters) {
+  handleFiltersChange(newFilters) {
     this.#currentFilters = { ...this.#currentFilters, ...newFilters };
-    this.#rerenderSubscriptions();
+    this.rerenderSubscriptions();
   }
 
-  #handleAddSubscription(subscriptionData) {
+  handleAddSubscription(subscriptionData) {
     // Бизнес-логика валидации
     if (!subscriptionData.name || !subscriptionData.price || !subscriptionData.type) {
       alert('Заполните название, стоимость и тип подписки');
@@ -176,72 +177,77 @@ export default class SubscriptionPresenter {
 
     const newSubscription = this.#subscriptionModel.addSubscription(subscriptionData);
     console.log('Добавлена подписка:', newSubscription);
-    this.#rerenderAll();
+    this.rerenderAll();
   }
 
-  #handleRemoveSubscription(subscriptionId) {
+  handleRemoveSubscription(subscriptionId) {
     if (confirm('Вы уверены, что хотите удалить эту подписку?')) {
       const success = this.#subscriptionModel.removeSubscription(subscriptionId);
       if (success) {
-        this.#rerenderAll();
+        this.rerenderAll();
       }
     }
   }
 
-  #setupEventHandlers() {
-    this.#setupAddButtonHandler();
-    this.#setupFilterHandlers();
+  handleEditSubscription(subscription) {
+    // TODO: Реализовать редактирование
+    console.log('Редактирование подписки:', subscription);
+    alert(`Редактирование подписки "${subscription.name}" будет реализовано позже`);
   }
 
-  #setupAddButtonHandler() {
+  setupEventHandlers() {
+    this.setupAddButtonHandler();
+    this.setupFilterHandlers();
+  }
+
+  setupAddButtonHandler() {
     const addButton = this.#mainContentContainer.querySelector('.add-btn');
     if (addButton) {
       addButton.addEventListener('click', () => {
-        this.#showAddSubscriptionForm();
+        this.showAddSubscriptionForm();
       });
     }
   }
 
-#setupFilterHandlers() {
-  // Обработчики для чекбоксов фильтров
-  const checkboxes = this.#sidebarContainer.querySelectorAll('.filter-group input[type="checkbox"]');
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      this.#updateTypeFilters();
+  setupFilterHandlers() {
+    // Обработчики для чекбоксов фильтров
+    const checkboxes = this.#sidebarContainer.querySelectorAll('.filter-group input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+        this.updateTypeFilters();
+      });
     });
-  });
 
-  // Обработчик для слайдера цены - ИСПРАВЛЕННАЯ ВЕРСИЯ
-  const priceSlider = document.querySelector('input[type="range"]');
-  if (priceSlider) {
-    console.log('Слайдер найден!'); // Для отладки
-    
-    priceSlider.addEventListener('input', (e) => {
-      const maxPrice = parseInt(e.target.value);
-      console.log('Слайдер изменен:', maxPrice); // Для отладки
+    // Обработчик для слайдера цены
+    const priceSlider = document.querySelector('input[type="range"]');
+    if (priceSlider) {
+      console.log('Слайдер найден!');
       
-      this.#currentFilters.maxPrice = maxPrice;
-      this.#rerenderSubscriptions();
-      
-      // Обновляем отображение цены
-      const maxValueElement = document.querySelector('.max-value');
-      if (maxValueElement) {
-        maxValueElement.textContent = `${maxPrice} ₽`;
+      priceSlider.addEventListener('input', (e) => {
+        const maxPrice = parseInt(e.target.value);
+        console.log('Слайдер изменен:', maxPrice);
+        
+        this.#currentFilters.maxPrice = maxPrice;
+        this.rerenderSubscriptions();
+        
+        // Обновляем отображение цены
+        const maxValueElement = document.querySelector('.max-value');
+        if (maxValueElement) {
+          maxValueElement.textContent = `${maxPrice} ₽`;
+        }
+      });
+
+      // Инициализируем начальное значение
+      const initialMaxValue = document.querySelector('.max-value');
+      if (initialMaxValue) {
+        initialMaxValue.textContent = `${priceSlider.value} ₽`;
       }
-    });
-
-    // Инициализируем начальное значение
-    const initialMaxValue = document.querySelector('.max-value');
-    if (initialMaxValue) {
-      initialMaxValue.textContent = `${priceSlider.value} ₽`;
+    } else {
+      console.error('Слайдер не найден!');
     }
-    
-  } else {
-    console.error('Слайдер не найден!');
   }
-}
 
-  #updateTypeFilters() {
+  updateTypeFilters() {
     const checkedTypes = Array.from(this.#sidebarContainer.querySelectorAll('.filter-group input[type="checkbox"]:checked'))
       .map(checkbox => {
         const label = checkbox.parentElement.textContent.trim();
@@ -249,10 +255,10 @@ export default class SubscriptionPresenter {
       });
     
     this.#currentFilters.types = checkedTypes;
-    this.#rerenderSubscriptions();
+    this.rerenderSubscriptions();
   }
 
-  #showAddSubscriptionForm() {
+  showAddSubscriptionForm() {
     const name = prompt('Название подписки:');
     if (!name) return;
 
@@ -269,7 +275,7 @@ export default class SubscriptionPresenter {
 
     const daysUntil = parseInt(prompt('Через сколько дней платеж?', '30')) || 30;
 
-    this.#handleAddSubscription({
+    this.handleAddSubscription({
       name,
       price,
       type,
@@ -278,26 +284,21 @@ export default class SubscriptionPresenter {
     });
   }
 
-  #rerenderSubscriptions() {
-    const oldSection = this.#mainContentContainer.querySelector('.subscriptions-section');
-    const horizontalBlocks = this.#mainContentContainer.querySelector('.horizontal-blocks');
+  rerenderSubscriptions() {
+    const subscriptions = this.#subscriptionModel.getSubscriptions(this.#currentFilters);
     
-    if (oldSection) {
-      oldSection.remove();
+    if (this.#subscriptionsListComponent) {
+      this.#subscriptionsListComponent.updateSubscriptions(subscriptions);
     }
     
-    // Создаем новую секцию подписок
-    this.#renderSubscriptions();
-    
-    // Если есть горизонтальные блоки, перемещаем подписки ПЕРЕД ними
-    const newSubscriptionsSection = this.#mainContentContainer.querySelector('.subscriptions-section');
-    if (horizontalBlocks && newSubscriptionsSection) {
-      this.#mainContentContainer.insertBefore(newSubscriptionsSection, horizontalBlocks);
+    // Если есть подписки - рендерим их
+    if (subscriptions.length > 0) {
+      this.renderSubscriptionItems();
     }
   }
 
-  #rerenderAll() {
+  rerenderAll() {
     this.#mainContentContainer.innerHTML = '';
-    this.#renderMainContent();
+    this.renderMainContent();
   }
 }
