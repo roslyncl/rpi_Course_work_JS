@@ -1,3 +1,5 @@
+import { notificationConstants } from '../mock/mock.js';
+
 export default class NotificationModel {
   #notifications = [];
   #observers = [];
@@ -18,7 +20,7 @@ export default class NotificationModel {
         title: sub.name,
         text: `${sub.price} ${sub.due.toLowerCase()}`,
         daysUntil: sub.daysUntil,
-        isUrgent: sub.daysUntil <= 3
+        isUrgent: sub.daysUntil <= notificationConstants.URGENT_DAYS
       }))
       .sort((a, b) => a.daysUntil - b.daysUntil);
 
@@ -26,7 +28,7 @@ export default class NotificationModel {
   }
 
   #isSubscriptionDueSoon(daysUntil) {
-    return daysUntil <= 7;
+    return daysUntil <= notificationConstants.DUE_SOON_DAYS;
   }
 
   addObserver(observer) {

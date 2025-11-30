@@ -1,5 +1,6 @@
 import RecommendationItemComponent from '../view/recommendation-item-component.js';
 import { render } from '../framework/render.js';
+import { presenterConstants, componentConfig } from '../mock/mock.js';
 
 export default class RecommendationsPresenter {
   #container = null;
@@ -15,12 +16,12 @@ export default class RecommendationsPresenter {
   }
 
   #renderRecommendations() {
-    const recommendationsSection = document.createElement('div');
-    recommendationsSection.className = 'recommendations-section';
-    recommendationsSection.innerHTML = '<h2>Рекомендации</h2>';
+    const recommendationsSection = document.createElement(componentConfig.RECOMMENDATIONS.tagName);
+    recommendationsSection.className = componentConfig.RECOMMENDATIONS.className;
+    recommendationsSection.innerHTML = `<h2>${presenterConstants.TEXTS.RECOMMENDATIONS_TITLE}</h2>`;
     
     const recommendationsList = document.createElement('div');
-    recommendationsList.className = 'recommendations-list';
+    recommendationsList.className = presenterConstants.CLASS_NAMES.RECOMMENDATIONS_LIST;
     
     recommendationsSection.appendChild(recommendationsList);
     this.#container.appendChild(recommendationsSection);

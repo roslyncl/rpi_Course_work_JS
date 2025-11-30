@@ -1,3 +1,5 @@
+import { recommendationsData } from '../mock/mock.js';
+
 export default class RecommendationModel {
   #recommendations = [];
   #observers = [];
@@ -17,39 +19,7 @@ export default class RecommendationModel {
       price: sub.priceValue
     }));
 
-    const recommendationsByCategory = {
-      'Стриминг': [
-        { name: 'Okko', avoid: ['netflix'], price: 299, details: 'Локальный контент дешевле' },
-        { name: 'IVI', avoid: [], price: 199, details: 'Российские фильмы и сериалы' },
-        { name: 'Start', avoid: [], price: 249, details: 'Эксклюзивные российские сериалы' }
-      ],
-      'Музыка': [
-        { name: 'Яндекс.Музыка', avoid: ['spotify'], price: 149, details: 'Умные рекомендации и локальный контент' },
-        { name: 'Apple Music', avoid: ['spotify'], price: 169, details: 'Высокое качество звука' },
-        { name: 'Deezer', avoid: [], price: 219, details: 'Flow - умный плейлист' }
-      ],
-      'ПО': [
-        { name: 'Figma Pro', avoid: ['adobe'], price: 999, details: 'Профессиональный дизайн для команд' },
-        { name: 'Notion Plus', avoid: [], price: 299, details: 'Расширенные возможности для организации' },
-        { name: 'Grammarly Premium', avoid: [], price: 599, details: 'Проверка грамматики и стиля' }
-      ],
-      'Видео': [
-        { name: 'YouTube Premium через VPN', avoid: ['youtube premium'], price: 179, details: 'Тот же сервис по региональной цене' },
-        { name: 'Twitch Turbo', avoid: [], price: 449, details: 'Просмотр без рекламы на Twitch' }
-      ],
-      'Игры': [
-        { name: 'Xbox Game Pass', avoid: [], price: 499, details: 'Доступ к сотням игр за одну подписку' },
-        { name: 'PlayStation Plus Essential', avoid: [], price: 599, details: 'Мультиплеер и бесплатные игры ежемесячно' },
-        { name: 'Nintendo Switch Online', avoid: [], price: 299, details: 'Классические игры NES и SNES' }
-      ],
-      'Другое': [
-        { name: 'Google One 100GB', avoid: [], price: 149, details: 'Облачное хранилище и дополнительные бонусы' },
-        { name: 'ChatGPT Plus', avoid: [], price: 1699, details: 'Расширенный доступ к нейросети' },
-        { name: 'Midjourney Pro', avoid: [], price: 1999, details: 'Генерация изображений без ограничений' }
-      ]
-    };
-
-    const allRecommendations = Object.entries(recommendationsByCategory)
+    const allRecommendations = Object.entries(recommendationsData)
       .flatMap(([category, recs]) => {
         const hasCategorySubscriptions = currentSubscriptions.some(sub => sub.type === category);
         

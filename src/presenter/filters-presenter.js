@@ -1,5 +1,6 @@
 import FiltersComponent from '../view/filters-component.js';
 import { render } from '../framework/render.js';
+import { presenterConstants } from '../mock/mock.js';
 
 export default class FiltersPresenter {
   #container = null;
@@ -28,19 +29,19 @@ export default class FiltersPresenter {
   }
 
   #setupFilterHandlers() {
-    this.#container.addEventListener('change', (e) => {
-      if (e.target.type === 'checkbox') {
+    this.#container.addEventListener(presenterConstants.EVENT_TYPES.CHANGE, (e) => {
+      if (e.target.type === presenterConstants.ELEMENT_TYPES.CHECKBOX) {
         this.#updateTypeFilters();
       }
     });
 
-    const priceSlider = this.#container.querySelector('input[type="range"]');
+    const priceSlider = this.#container.querySelector(`input[type="${presenterConstants.ELEMENT_TYPES.RANGE}"]`);
     if (priceSlider) {
-      priceSlider.addEventListener('input', (e) => {
+      priceSlider.addEventListener(presenterConstants.EVENT_TYPES.INPUT, (e) => {
         const maxPrice = parseInt(e.target.value);
         this.#filtersModel.setFilters({ maxPrice });
         
-        const maxValueElement = this.#container.querySelector('.max-value');
+        const maxValueElement = this.#container.querySelector(`.${presenterConstants.CLASS_NAMES.MAX_VALUE}`);
         if (maxValueElement) {
           maxValueElement.textContent = `${maxPrice.toLocaleString('ru-RU')} ₽`;
         }
@@ -51,15 +52,15 @@ export default class FiltersPresenter {
   }
 
   #updateTypeFilters() {
-    const checkedTypes = Array.from(this.#container.querySelectorAll('.filter-group input[type="checkbox"]:checked'))
+    const checkedTypes = Array.from(this.#container.querySelectorAll(`.${presenterConstants.CLASS_NAMES.FILTER_GROUP} input[type="${presenterConstants.ELEMENT_TYPES.CHECKBOX}"]:checked`))
       .map(checkbox => checkbox.value);
     
     this.#filtersModel.setFilters({ types: checkedTypes });
   }
 
   #updatePriceDisplay() {
-    const maxValueElement = this.#container.querySelector('.max-value');
-    const priceSlider = this.#container.querySelector('input[type="range"]');
+    const maxValueElement = this.#container.querySelector(`.${presenterConstants.CLASS_NAMES.MAX_VALUE}`);
+    const priceSlider = this.#container.querySelector(`input[type="${presenterConstants.ELEMENT_TYPES.RANGE}"]`);
     
     if (maxValueElement && priceSlider) {
       maxValueElement.textContent = `${this.#filtersModel.getMaxPrice().toLocaleString('ru-RU')} ₽`;

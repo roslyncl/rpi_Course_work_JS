@@ -1,7 +1,9 @@
+import { filterConstants } from '../mock/mock.js';
+
 export default class FiltersModel {
   #filters = {
-    types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
-    maxPrice: 5000
+    types: [...filterConstants.DEFAULT_TYPES],
+    maxPrice: filterConstants.DEFAULT_MAX_PRICE
   };
   #observers = [];
 
@@ -18,8 +20,8 @@ export default class FiltersModel {
 
   resetFilters() {
     this.#filters = {
-      types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
-      maxPrice: 5000
+      types: [...filterConstants.DEFAULT_TYPES],
+      maxPrice: filterConstants.DEFAULT_MAX_PRICE
     };
     this.#notifyObservers();
   }

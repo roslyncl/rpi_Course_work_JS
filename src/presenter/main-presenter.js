@@ -6,6 +6,7 @@ import NotificationsPresenter from './notifications-presenter.js';
 import RecommendationsPresenter from './recommendations-presenter.js';
 import AnalyticsPresenter from './analytics-presenter.js';
 import { render } from '../framework/render.js';
+import { presenterConstants, componentConfig } from '../mock/mock.js';
 
 export default class MainPresenter {
   #headerContainer = null;
@@ -71,7 +72,7 @@ export default class MainPresenter {
 
   #renderHorizontalBlocks() {
     const horizontalBlocksContainer = document.createElement('div');
-    horizontalBlocksContainer.className = 'horizontal-blocks';
+    horizontalBlocksContainer.className = presenterConstants.CLASS_NAMES.HORIZONTAL_BLOCKS;
     this.#mainContentContainer.appendChild(horizontalBlocksContainer);
 
     const notificationsPresenter = new NotificationsPresenter({
@@ -88,8 +89,8 @@ export default class MainPresenter {
   }
 
   #renderAnalytics() {
-    const analyticsSection = document.createElement('div');
-    analyticsSection.className = 'analytics-section';
+    const analyticsSection = document.createElement(componentConfig.ANALYTICS.tagName);
+    analyticsSection.className = componentConfig.ANALYTICS.className;
     this.#mainContentContainer.appendChild(analyticsSection);
 
     const analyticsPresenter = new AnalyticsPresenter({
@@ -99,7 +100,7 @@ export default class MainPresenter {
     analyticsPresenter.init();
   }
 
-  #handleModelChange() {и
+  #handleModelChange() {
     this.#renderMainContent();
   }
 }

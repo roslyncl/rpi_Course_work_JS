@@ -1,3 +1,5 @@
+import { categoryColors } from '../mock/mock.js';
+
 export default class AnalyticsModel {
   #analytics = {};
   #observers = [];
@@ -43,15 +45,7 @@ export default class AnalyticsModel {
   }
 
   #getCategoryColor(type) {
-    const colorMap = {
-      'Стриминг': 'streaming',
-      'Музыка': 'music', 
-      'ПО': 'software',
-      'Видео': 'streaming',
-      'Игры': 'other',
-      'Другое': 'other'
-    };
-    return colorMap[type] || 'other';
+    return categoryColors[type] || 'other';
   }
 
   #formatCurrency(amount) {

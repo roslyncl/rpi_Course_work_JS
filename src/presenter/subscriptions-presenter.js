@@ -4,6 +4,7 @@ import AddSubscriptionFormComponent from '../view/add-subscription-form-componen
 import EditSubscriptionFormComponent from '../view/edit-subscription-form-component.js';
 import DeleteSubscriptionFormComponent from '../view/delete-subscription-form-component.js';
 import { render } from '../framework/render.js';
+import { presenterConstants } from '../mock/mock.js';
 
 export default class SubscriptionsPresenter {
   #container = null;
@@ -33,7 +34,7 @@ export default class SubscriptionsPresenter {
   }
 
   #renderSubscriptionItems() {
-    const subscriptionsList = this.#container.querySelector('.subscriptions-list');
+    const subscriptionsList = this.#container.querySelector(`.${presenterConstants.CLASS_NAMES.SUBSCRIPTIONS_LIST}`);
     const subscriptions = this.#subscriptionModel.getSubscriptions();
     
     if (subscriptionsList) {
@@ -65,7 +66,7 @@ export default class SubscriptionsPresenter {
       this.#subscriptionModel.addSubscription(subscriptionData);
       this.#addSubscriptionFormComponent.hide();
     } catch (error) {
-      alert('Ошибка при добавлении подписки: ' + error.message);
+      alert(presenterConstants.TEXTS.ADD_SUBSCRIPTION_ERROR + error.message);
     }
   }
 
@@ -82,7 +83,7 @@ export default class SubscriptionsPresenter {
       this.#subscriptionModel.removeSubscription(subscriptionId);
       this.#hideDeleteForm();
     } catch (error) {
-      alert('Ошибка при удалении подписки: ' + error.message);
+      alert(presenterConstants.TEXTS.DELETE_SUBSCRIPTION_ERROR + error.message);
     }
   }
 
@@ -95,7 +96,7 @@ export default class SubscriptionsPresenter {
       this.#subscriptionModel.updateSubscription(subscriptionId, updatedData);
       this.#hideEditForm();
     } catch (error) {
-      alert('Ошибка при обновлении подписки: ' + error.message);
+      alert(presenterConstants.TEXTS.UPDATE_SUBSCRIPTION_ERROR + error.message);
     }
   }
 
@@ -154,9 +155,9 @@ export default class SubscriptionsPresenter {
   }
 
   #setupEventHandlers() {
-    const addButton = this.#container.querySelector('.add-btn');
+    const addButton = this.#container.querySelector(`.${presenterConstants.CLASS_NAMES.ADD_BUTTON}`);
     if (addButton) {
-      addButton.addEventListener('click', () => {
+      addButton.addEventListener(presenterConstants.EVENT_TYPES.CLICK, () => {
         this.#addSubscriptionFormComponent.show();
       });
     }

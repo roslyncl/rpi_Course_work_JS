@@ -1,5 +1,6 @@
 import NotificationItemComponent from '../view/notification-item-component.js';
 import { render } from '../framework/render.js';
+import { presenterConstants, componentConfig } from '../mock/mock.js';
 
 export default class NotificationsPresenter {
   #container = null;
@@ -15,12 +16,12 @@ export default class NotificationsPresenter {
   }
 
   #renderNotifications() {
-    const notificationsSection = document.createElement('div');
-    notificationsSection.className = 'notifications-section';
-    notificationsSection.innerHTML = '<h2>Ближайшие платежи</h2>';
+    const notificationsSection = document.createElement(componentConfig.NOTIFICATIONS.tagName);
+    notificationsSection.className = componentConfig.NOTIFICATIONS.className;
+    notificationsSection.innerHTML = `<h2>${presenterConstants.TEXTS.NOTIFICATIONS_TITLE}</h2>`;
     
     const notificationsList = document.createElement('div');
-    notificationsList.className = 'notifications-list';
+    notificationsList.className = presenterConstants.CLASS_NAMES.NOTIFICATIONS_LIST;
     
     notificationsSection.appendChild(notificationsList);
     this.#container.appendChild(notificationsSection);
