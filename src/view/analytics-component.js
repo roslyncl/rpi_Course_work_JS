@@ -1,7 +1,14 @@
+// src/view/analytics-component.js
 import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createAnalyticsComponentTemplate(analytics) {
-  const { categories, totalCost, yearlyCost, savings, budgetPercentage } = analytics;
+  // Добавляем проверки и значения по умолчанию
+  const categories = analytics?.categories || [];
+  const totalCost = analytics?.totalCost || '2 450 ₽';
+  const yearlyCost = analytics?.yearlyCost || '29 400 ₽';
+  const savings = analytics?.savings || '-1800 ₽';
+  const budgetPercentage = analytics?.budgetPercentage || '18%';
+  
   const pieSlices = generatePieSlices(categories);
   
   return (
@@ -21,7 +28,7 @@ function createAnalyticsComponentTemplate(analytics) {
           <div class="chart-legend">
             ${categories.map(category => 
               `<div class="legend-item">
-                <div class="legend-color ${category.color}"></div>
+                <div class="legend-color ${category.color || 'other'}"></div>
                 <div class="legend-text">${category.name} - ${category.cost} (${category.percentage}%)</div>
               </div>`
             ).join('')}
@@ -30,19 +37,19 @@ function createAnalyticsComponentTemplate(analytics) {
 
         <div class="analytics-stats">
           <div class="analytics-stat-item">
-            <div class="stat-value">${totalCost || '2 450 ₽'}</div>
+            <div class="stat-value">${totalCost}</div>
             <div class="stat-label">В месяц</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value">${yearlyCost || '29 400 ₽'}</div>
+            <div class="stat-value">${yearlyCost}</div>
             <div class="stat-label">В год</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value highlight">${savings || '-1800 ₽'}</div>
+            <div class="stat-value highlight">${savings}</div>
             <div class="stat-label">Экономия с альтернативами</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value">${budgetPercentage || '18%'}</div>
+            <div class="stat-value">${budgetPercentage}</div>
             <div class="stat-label">От общего бюджета</div>
           </div>
         </div>
@@ -52,25 +59,18 @@ function createAnalyticsComponentTemplate(analytics) {
 }
 
 function generatePieSlices(categories) {
-  console.log('🎨 Raw categories:', categories);
-  
   if (!categories || categories.length === 0) {
-    return '';
+    return '<div class="chart-visual"><div class="chart-center"></div></div>';
   }
 
   let gradientStops = [];
   let currentPercent = 0;
 
-  categories.forEach((category, index) => {
+  categories.forEach((category) => {
     const percentage = category.percentage || 0;
-    
-    // Передаем процент для регулировки насыщенности
     const color = getCategoryColor(category.name, percentage);
-    
     const startPercent = currentPercent;
     const endPercent = currentPercent + percentage;
-    
-    console.log(`🎨 Segment ${index}: ${category.name} ${percentage}% -> ${color}`);
     
     gradientStops.push(`${color} ${startPercent}% ${endPercent}%`);
     currentPercent = endPercent;
@@ -85,23 +85,23 @@ function generatePieSlices(categories) {
 }
 
 function getCategoryColor(categoryType, percentage) {
-  // Базовый фиолетовый в HSL
-  const baseHue = 270; // Фиолетовый оттенок
+  const baseHue = 270;
+  const saturation = 40 + (percentage / 100) * 50;
+  const lightness = 85 - (percentage / 100) * 40;
   
-  // Регулируем насыщенность и яркость в зависимости от процента
-  const saturation = 40 + (percentage / 100) * 50; // 40% - 90%
-  const lightness = 85 - (percentage / 100) * 40;  // 85% - 45% (чем больше %, тем темнее)
-  
-  const color = `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
-  console.log(`🎨 ${categoryType} ${percentage}% -> hsl(${baseHue}, ${saturation}%, ${lightness}%)`);
-  
-  return color;
+  return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
 }
 
 export default class AnalyticsComponent extends AbstractComponent {
   constructor({ analytics }) {
     super();
-    this.analytics = analytics;
+    this.analytics = analytics || {
+      categories: [],
+      totalCost: '2 450 ₽',
+      yearlyCost: '29 400 ₽',
+      savings: '-1800 ₽',
+      budgetPercentage: '18%'
+    };
   }
 
   get template() {
