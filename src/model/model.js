@@ -19,15 +19,18 @@ export default class MainModel {
   #statsModel = null;
   #analyticsModel = null;
   #recommendationModel = null;
+  #filtersModel = null;
   #observers = [];
 
-  constructor() {
+  constructor(filtersModel) {
+    this.#filtersModel = filtersModel;
     this.#initModels();
     this.#setupObservers();
   }
 
   #initModels() {
-    this.#subscriptionModel = new SubscriptionModel(initialSubscriptions);
+    // Передаем filtersModel в subscriptionModel
+    this.#subscriptionModel = new SubscriptionModel(initialSubscriptions, this.#filtersModel);
     this.#notificationModel = new NotificationModel(initialNotifications);
     this.#statsModel = new StatsModel(initialStats);
     this.#analyticsModel = new AnalyticsModel(initialAnalytics);
@@ -38,22 +41,31 @@ export default class MainModel {
 
   #setupObservers() {
     this.#subscriptionModel.addObserver(() => this.#onSubscriptionsChange());
+    // Добавляем наблюдатель для фильтров
+    if (this.#filtersModel) {
+      this.#filtersModel.addObserver(() => this.#onFiltersChange());
+    }
   }
 
   #onSubscriptionsChange() {
-  const subscriptions = this.#subscriptionModel.subscriptions;
-  const categories = this.#subscriptionModel.getCategories();
-  
-  this.#notificationModel.updateNotifications(subscriptions);
-  this.#statsModel.updateStats(subscriptions);
-  this.#analyticsModel.updateAnalytics(subscriptions);
-  this.#recommendationModel.updateRecommendations(subscriptions, categories);
-  
-  this._notifyObservers();
-}
+    const subscriptions = this.#subscriptionModel.allSubscriptions;
+    const categories = this.#subscriptionModel.getCategories();
+    
+    this.#notificationModel.updateNotifications(subscriptions);
+    this.#statsModel.updateStats(subscriptions);
+    this.#analyticsModel.updateAnalytics(subscriptions);
+    this.#recommendationModel.updateRecommendations(subscriptions, categories);
+    
+    this._notifyObservers();
+  }
+
+  #onFiltersChange() {
+    // При изменении фильтров уведомляем наблюдателей
+    this._notifyObservers();
+  }
 
   #syncAllData() {
-    const subscriptions = this.#subscriptionModel.subscriptions;
+    const subscriptions = this.#subscriptionModel.allSubscriptions;
     this.#notificationModel.updateNotifications(subscriptions);
     this.#statsModel.updateStats(subscriptions);
     this.#analyticsModel.updateAnalytics(subscriptions);
@@ -76,10 +88,22 @@ export default class MainModel {
   }
 
   getSubscriptions(filters = {}) {
-    if (Object.keys(filters).length > 0) {
-      return this.#subscriptionModel.filterSubscriptions(filters);
-    }
+    // Используем встроенную фильтрацию через subscriptionModel
     return this.#subscriptionModel.subscriptions;
+  }
+
+  // Filters methods
+  setFilters(filters) {
+    if (this.#filtersModel) {
+      this.#filtersModel.setFilters(filters);
+    }
+  }
+
+  getFilters() {
+    return this.#filtersModel ? this.#filtersModel.filters : {
+      types: ['Стриминг', 'Музыка', 'ПО', 'Игры', 'Другое'],
+      maxPrice: 5000
+    };
   }
 
   // Getters
@@ -97,6 +121,10 @@ export default class MainModel {
 
   getAnalytics() { 
     return this.#analyticsModel.analytics; 
+  }
+
+  getFiltersModel() {
+    return this.#filtersModel;
   }
 
   // Observer pattern

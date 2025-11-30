@@ -1,6 +1,7 @@
 // src/main.js
 import MainPresenter from './presenter/main-presenter.js';
 import MainModel from './model/model.js';
+import FiltersModel from './model/filters-model.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const headerContainer = document.querySelector('.app-header');
@@ -13,12 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  const subscriptionModel = new MainModel();
+  // Создаем модели
+  const filtersModel = new FiltersModel();
+  const subscriptionModel = new MainModel(filtersModel);
+
   const mainPresenter = new MainPresenter({
     headerContainer: headerContainer,
     sidebarContainer: sidebarContainer,
     mainContentContainer: mainContentContainer,
-    subscriptionModel: subscriptionModel
+    subscriptionModel: subscriptionModel,
+    filtersModel: filtersModel
   });
 
   mainPresenter.init();

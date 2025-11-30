@@ -13,19 +13,24 @@ export default class MainPresenter {
   #sidebarContainer = null;
   #mainContentContainer = null;
   #subscriptionModel = null;
+  #filtersModel = null;
 
   constructor({ 
     headerContainer, 
     sidebarContainer, 
     mainContentContainer, 
-    subscriptionModel 
+    subscriptionModel,
+    filtersModel
   }) {
     this.#headerContainer = headerContainer;
     this.#sidebarContainer = sidebarContainer;
     this.#mainContentContainer = mainContentContainer;
     this.#subscriptionModel = subscriptionModel;
+    this.#filtersModel = filtersModel;
 
     this.#subscriptionModel.addObserver(this.#handleModelChange.bind(this));
+    // Добавляем наблюдатель для фильтров
+    this.#filtersModel.addObserver(this.#handleModelChange.bind(this));
   }
 
   init() {
@@ -43,7 +48,7 @@ export default class MainPresenter {
     // Рендерим фильтры
     const filtersPresenter = new FiltersPresenter({
       container: this.#sidebarContainer,
-      subscriptionModel: this.#subscriptionModel
+      filtersModel: this.#filtersModel
     });
     filtersPresenter.init();
 
@@ -102,6 +107,7 @@ export default class MainPresenter {
   }
 
   #handleModelChange() {
+    // Перерисовываем контент при любых изменениях модели
     this.#renderMainContent();
   }
 }

@@ -1,15 +1,18 @@
 // src/model/subscription-model.js
 export default class SubscriptionModel {
   #subscriptions = [];
-  #filters = {
-    types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
-    maxPrice: 5000
-  };
+  #filtersModel = null;
   #observers = [];
 
-  constructor(initialSubscriptions = []) {
+  constructor(initialSubscriptions = [], filtersModel = null) {
+    this.#filtersModel = filtersModel;
     this.#subscriptions = this.#parseSubscriptions(initialSubscriptions);
     this.#updateAllData();
+    
+    // Подписываемся на изменения фильтров
+    if (this.#filtersModel) {
+      this.#filtersModel.addObserver(() => this.#onFiltersChange());
+    }
   }
 
   // Преобразуем моковые данные в рабочий формат
@@ -61,18 +64,34 @@ export default class SubscriptionModel {
     this._notifyObservers();
   }
 
-  // Публичные методы
-  get subscriptions() {
-    return this.#subscriptions;
-  }
-
-  setFilters(filters) {
-    this.#filters = { ...this.#filters, ...filters };
+  #onFiltersChange() {
+    // При изменении фильтров уведомляем наблюдателей
     this._notifyObservers();
   }
 
+  // Публичные методы
+  get subscriptions() {
+    // Если есть модель фильтров, используем её для фильтрации
+    if (this.#filtersModel) {
+      return this.#filtersModel.applyFilters(this.#subscriptions);
+    }
+    return this.#subscriptions;
+  }
+
+  get allSubscriptions() {
+    // Все подписки без фильтрации
+    return this.#subscriptions;
+  }
+
+  // Для обратной совместимости
+  setFilters(filters) {
+    if (this.#filtersModel) {
+      this.#filtersModel.setFilters(filters);
+    }
+  }
+
   getSubscriptions() {
-    return this.filterSubscriptions(this.#filters);
+    return this.subscriptions;
   }
 
   addSubscription(subscriptionData) {
@@ -123,18 +142,17 @@ export default class SubscriptionModel {
     return false;
   }
 
+  // Метод для обратной совместимости
   filterSubscriptions(filters = {}) {
-    let filtered = [...this.#subscriptions];
-
-    if (filters.types && filters.types.length > 0) {
-      filtered = filtered.filter(sub => filters.types.includes(sub.type));
+    if (Object.keys(filters).length === 0) {
+      return this.subscriptions;
     }
-
-    if (filters.maxPrice > 0) {
-      filtered = filtered.filter(sub => sub.priceValue <= filters.maxPrice);
-    }
-
-    return filtered;
+    
+    return this.#subscriptions.filter(subscription => {
+      const matchesType = !filters.types || filters.types.includes(subscription.type);
+      const matchesPrice = !filters.maxPrice || subscription.priceValue <= filters.maxPrice;
+      return matchesType && matchesPrice;
+    });
   }
 
   #formatCurrency(amount) {
@@ -151,7 +169,7 @@ export default class SubscriptionModel {
 
   getCategories() {
     return [...new Set(this.#subscriptions.map(sub => sub.type))];
-}
+  }
 
   // Observer pattern
   addObserver(observer) {

@@ -1,25 +1,25 @@
 import { AbstractComponent } from "../framework/view/abstract-component.js";
 
-function createFiltersComponentTemplate() {
+function createFiltersComponentTemplate(filters) {
+    const { types, maxPrice } = filters;
+    
     return (
         `<div class="filters">
             <h2>Фильтры</h2>
             
             <div class="filter-group">
                 <h3>Тип подписки</h3>
-                <label><input type="checkbox" checked> Стриминг</label>
-                <label><input type="checkbox" checked> Музыка</label>
-                <label><input type="checkbox" checked> ПО</label>
-                <label><input type="checkbox" checked> Игры</label>
-                <label><input type="checkbox" checked> Другое</label>
+                ${types.map(type => `
+                    <label><input type="checkbox" value="${type}" checked> ${type}</label>
+                `).join('')}
             </div>
             
             <div class="filter-group">
                 <h3>Стоимость</h3>
-                <input type="range" min="0" max="5000" value="2000">
+                <input type="range" min="0" max="5000" value="${maxPrice}">
                 <div class="range-values">
                     <div class="min-value">0 ₽</div>
-                    <div class="max-value">5 000 ₽</div>
+                    <div class="max-value">${maxPrice.toLocaleString('ru-RU')} ₽</div>
                 </div>
             </div>
         </div>`
@@ -27,7 +27,14 @@ function createFiltersComponentTemplate() {
 }
 
 export default class FiltersComponent extends AbstractComponent {
+    #filters = null;
+
+    constructor({ filters }) {
+        super();
+        this.#filters = filters;
+    }
+
     get template() { 
-        return createFiltersComponentTemplate();
+        return createFiltersComponentTemplate(this.#filters);
     }
 }

@@ -4,17 +4,12 @@ import { render } from '../framework/render.js';
 
 export default class FiltersPresenter {
   #container = null;
-  #subscriptionModel = null;
+  #filtersModel = null;
   #filtersComponent = null;
 
-  #currentFilters = {
-    types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
-    maxPrice: 5000
-  };
-
-  constructor({ container, subscriptionModel }) {
+  constructor({ container, filtersModel }) {
     this.#container = container;
-    this.#subscriptionModel = subscriptionModel;
+    this.#filtersModel = filtersModel;
   }
 
   init() {
@@ -24,15 +19,9 @@ export default class FiltersPresenter {
 
   #renderFilters() {
     this.#filtersComponent = new FiltersComponent({
-      filters: this.#currentFilters,
-      onFiltersChange: this.#handleFiltersChange.bind(this)
+      filters: this.#filtersModel.filters
     });
     render(this.#filtersComponent, this.#container);
-  }
-
-  #handleFiltersChange(newFilters) {
-    this.#currentFilters = { ...this.#currentFilters, ...newFilters };
-    this.#subscriptionModel.setFilters(this.#currentFilters);
   }
 
   #setupEventHandlers() {
@@ -40,38 +29,46 @@ export default class FiltersPresenter {
   }
 
   #setupFilterHandlers() {
-    const checkboxes = this.#container.querySelectorAll('.filter-group input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
+    // Делегирование событий для чекбоксов
+    this.#container.addEventListener('change', (e) => {
+      if (e.target.type === 'checkbox') {
         this.#updateTypeFilters();
-      });
+      }
     });
 
+    // Обработчик для слайдера цены
     const priceSlider = this.#container.querySelector('input[type="range"]');
     if (priceSlider) {
       priceSlider.addEventListener('input', (e) => {
         const maxPrice = parseInt(e.target.value);
-        this.#currentFilters.maxPrice = maxPrice;
-        this.#subscriptionModel.setFilters(this.#currentFilters);
+        this.#filtersModel.setFilters({ maxPrice });
         
+        // Обновляем отображение максимальной цены
         const maxValueElement = this.#container.querySelector('.max-value');
         if (maxValueElement) {
-          maxValueElement.textContent = `${maxPrice} ₽`;
+          maxValueElement.textContent = `${maxPrice.toLocaleString('ru-RU')} ₽`;
         }
       });
 
-      const initialMaxValue = this.#container.querySelector('.max-value');
-      if (initialMaxValue) {
-        initialMaxValue.textContent = `${priceSlider.value} ₽`;
-      }
+      // Инициализация начального значения
+      this.#updatePriceDisplay();
     }
   }
 
   #updateTypeFilters() {
     const checkedTypes = Array.from(this.#container.querySelectorAll('.filter-group input[type="checkbox"]:checked'))
-      .map(checkbox => checkbox.parentElement.textContent.trim());
+      .map(checkbox => checkbox.value);
     
-    this.#currentFilters.types = checkedTypes;
-    this.#subscriptionModel.setFilters(this.#currentFilters);
+    this.#filtersModel.setFilters({ types: checkedTypes });
+  }
+
+  #updatePriceDisplay() {
+    const maxValueElement = this.#container.querySelector('.max-value');
+    const priceSlider = this.#container.querySelector('input[type="range"]');
+    
+    if (maxValueElement && priceSlider) {
+      maxValueElement.textContent = `${this.#filtersModel.getMaxPrice().toLocaleString('ru-RU')} ₽`;
+      priceSlider.value = this.#filtersModel.getMaxPrice();
+    }
   }
 }
