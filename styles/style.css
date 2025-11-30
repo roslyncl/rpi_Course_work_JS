@@ -695,39 +695,100 @@ main {
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
-/* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+
+
+/* Стили для формы добавления подписки */
+.add-subscription-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
-@keyframes slideUp {
-    from { 
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
+.add-subscription-form.active {
+  display: flex;
 }
 
-/* Адаптивность */
-@media (max-width: 600px) {
-    .add-subscription-form-container {
-        margin: 20px;
-        max-height: calc(100vh - 40px);
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    .form-header {
-        padding: 20px 20px 0;
-    }
-    
-    .subscription-form {
-        padding: 0 20px 20px;
-    }
+.add-subscription-form .form-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
+
+.add-subscription-form .form-content h3 {
+  margin: 0 0 20px 0;
+  color: #2d3748;
+  font-size: 22px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.add-subscription-form .form-group {
+  margin-bottom: 20px;
+}
+
+.add-subscription-form .form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: #f8fafc;
+}
+
+.add-subscription-form .form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+}
+
+.add-subscription-form .form-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.add-subscription-form .submit-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: #48bb78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-subscription-form .submit-btn:hover {
+  background: #38a169;
+}
+
+.add-subscription-form .cancel-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-subscription-form .cancel-btn:hover {
+  background: #c53030;
+}
+

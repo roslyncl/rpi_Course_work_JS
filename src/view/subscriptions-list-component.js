@@ -39,6 +39,7 @@ export default class SubscriptionsListComponent extends AbstractComponent {
         this.renderSubscriptionsList();
     }
 
+    // В subscriptions-list-component.js должен быть такой код для рендера кнопки
     renderAddButton() {
         const addButtonContainer = this.element.querySelector('.add-btn-container');
         if (addButtonContainer && !this.addButtonComponent) {

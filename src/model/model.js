@@ -218,29 +218,28 @@ export default class SubscriptionModel {
     }).filter(rec => rec !== null);
   }
 
-#formatCurrency(amount) {
-  if (typeof amount !== 'number' || isNaN(amount)) {
-    return '0 ₽';
+  #formatCurrency(amount) {
+    if (typeof amount !== 'number' || isNaN(amount)) {
+      return '0 ₽';
+    }
+    
+    return new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: 'RUB',
+      minimumFractionDigits: 0
+    }).format(amount).replace(',00', '');
   }
-  
-  return new Intl.NumberFormat('ru-RU', {
-    style: 'currency',
-    currency: 'RUB',
-    minimumFractionDigits: 0
-  }).format(amount).replace(',00', '');
-}
 
-  // === ПУБЛИЧНЫЕ МЕТОДЫ ДЛЯ ПРЕЗЕНТЕРА ===
 
   addSubscription(subscriptionData) {
     const newSubscription = {
       id: Date.now().toString(),
       ...subscriptionData,
-      priceValue: subscriptionData.price,
-      price: this.#formatCurrency(subscriptionData.price),
-      daysUntil: subscriptionData.daysUntil || 30,
-      due: this.#formatDueText(subscriptionData.daysUntil || 30),
-      nextPaymentDate: this.#calculateNextPaymentDate(subscriptionData.daysUntil || 30),
+      priceValue: parseInt(subscriptionData.price),
+      price: this.#formatCurrency(parseInt(subscriptionData.price)),
+      daysUntil: parseInt(subscriptionData.daysUntil) || 30,
+      due: this.#formatDueText(parseInt(subscriptionData.daysUntil) || 30),
+      nextPaymentDate: this.#calculateNextPaymentDate(parseInt(subscriptionData.daysUntil) || 30),
       status: 'active'
     };
 

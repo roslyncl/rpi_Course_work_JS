@@ -9,6 +9,7 @@ import NotificationItemComponent from '../view/notification-item-component.js';
 import RecommendationsListComponent from '../view/recommendations-list-component.js';
 import RecommendationItemComponent from '../view/recommendation-item-component.js';
 import AnalyticsComponent from '../view/analytics-component.js';
+import AddSubscriptionFormComponent from '../view/add-subscription-form-component.js';
 import { render } from '../framework/render.js';
 
 export default class SubscriptionPresenter {
@@ -20,7 +21,8 @@ export default class SubscriptionPresenter {
     types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
     maxPrice: 5000
   };
-  #subscriptionsListComponent = null; // Добавляем ссылку на компонент
+  #subscriptionsListComponent = null;
+  #addSubscriptionFormComponent = null;
 
   constructor({ 
     headerContainer, 
@@ -38,6 +40,7 @@ export default class SubscriptionPresenter {
     this.renderHeader();
     this.renderSidebar();
     this.renderMainContent();
+    this.renderAddSubscriptionForm();
   }
 
   renderHeader() {
@@ -81,13 +84,14 @@ export default class SubscriptionPresenter {
     }
   }
 
-  // Новый метод для рендеринга элементов подписок
   renderSubscriptionItems() {
     const subscriptionsList = this.#mainContentContainer.querySelector('.subscriptions-list');
     const subscriptions = this.#subscriptionModel.getSubscriptions(this.#currentFilters);
     
     // Очищаем список перед рендером
-    subscriptionsList.innerHTML = '';
+    if (subscriptionsList) {
+      subscriptionsList.innerHTML = '';
+    }
     
     subscriptions.forEach(subscription => {
       const subscriptionComponent = new SubscriptionItemComponent({ 
@@ -156,6 +160,17 @@ export default class SubscriptionPresenter {
     render(analyticsComponent, analyticsSection);
   }
 
+  renderAddSubscriptionForm() {
+    this.#addSubscriptionFormComponent = new AddSubscriptionFormComponent({
+        onFormSubmit: this.handleAddSubscription.bind(this),
+        onFormCancel: this.handleFormCancel.bind(this)
+    });
+    
+    // Рендерим форму прямо в body
+    render(this.#addSubscriptionFormComponent, document.body);
+    this.#addSubscriptionFormComponent.hide();
+  }
+
   // === ОБРАБОТЧИКИ СОБЫТИЙ ===
 
   handleFiltersChange(newFilters) {
@@ -164,20 +179,23 @@ export default class SubscriptionPresenter {
   }
 
   handleAddSubscription(subscriptionData) {
-    // Бизнес-логика валидации
-    if (!subscriptionData.name || !subscriptionData.price || !subscriptionData.type) {
-      alert('Заполните название, стоимость и тип подписки');
-      return;
+    try {
+      const newSubscription = this.#subscriptionModel.addSubscription(subscriptionData);
+      console.log('✅ Добавлена подписка:', newSubscription);
+      
+      // Скрываем форму
+      this.#addSubscriptionFormComponent.hide();
+      
+      // Перерисовываем всё
+      this.rerenderAll();
+      
+    } catch (error) {
+      alert('Ошибка при добавлении подписки: ' + error.message);
     }
+  }
 
-    if (subscriptionData.price <= 0) {
-      alert('Стоимость должна быть положительной');
-      return;
-    }
-
-    const newSubscription = this.#subscriptionModel.addSubscription(subscriptionData);
-    console.log('Добавлена подписка:', newSubscription);
-    this.rerenderAll();
+  handleFormCancel() {
+    this.#addSubscriptionFormComponent.hide();
   }
 
   handleRemoveSubscription(subscriptionId) {
@@ -259,29 +277,7 @@ export default class SubscriptionPresenter {
   }
 
   showAddSubscriptionForm() {
-    const name = prompt('Название подписки:');
-    if (!name) return;
-
-    const price = parseInt(prompt('Стоимость (руб/мес):'));
-    if (!price || price <= 0) {
-      alert('Введите корректную стоимость');
-      return;
-    }
-
-    const type = prompt('Тип (Стриминг/Музыка/ПО/Видео/Игры/Другое):');
-    if (!type) return;
-
-    const details = prompt('Описание (необязательно):') || '';
-
-    const daysUntil = parseInt(prompt('Через сколько дней платеж?', '30')) || 30;
-
-    this.handleAddSubscription({
-      name,
-      price,
-      type,
-      details,
-      daysUntil
-    });
+    this.#addSubscriptionFormComponent.show();
   }
 
   rerenderSubscriptions() {
