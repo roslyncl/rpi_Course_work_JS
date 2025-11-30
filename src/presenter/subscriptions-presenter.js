@@ -3,6 +3,7 @@ import SubscriptionsListComponent from '../view/subscriptions-list-component.js'
 import SubscriptionItemComponent from '../view/subscription-item-component.js';
 import AddSubscriptionFormComponent from '../view/add-subscription-form-component.js';
 import EditSubscriptionFormComponent from '../view/edit-subscription-form-component.js';
+import DeleteSubscriptionFormComponent from '../view/delete-subscription-form-component.js';
 import { render } from '../framework/render.js';
 
 export default class SubscriptionsPresenter {
@@ -12,6 +13,7 @@ export default class SubscriptionsPresenter {
   #subscriptionsListComponent = null;
   #addSubscriptionFormComponent = null;
   #editSubscriptionFormComponent = null;
+  #deleteSubscriptionFormComponent = null;
 
   constructor({ container, subscriptionModel }) {
     this.#container = container;
@@ -43,7 +45,7 @@ export default class SubscriptionsPresenter {
       const subscriptionComponent = new SubscriptionItemComponent({ 
         subscription,
         onEdit: () => this.#handleEditSubscription(subscription),
-        onDelete: () => this.#handleRemoveSubscription(subscription.id)
+        onDelete: () => this.#handleDeleteSubscription(subscription)
       });
       render(subscriptionComponent, subscriptionsList);
     });
@@ -72,9 +74,16 @@ export default class SubscriptionsPresenter {
     this.#addSubscriptionFormComponent.hide();
   }
 
-  #handleRemoveSubscription(subscriptionId) {
-    if (confirm('Вы уверены, что хотите удалить эту подписку?')) {
+  #handleDeleteSubscription(subscription) {
+    this.#showDeleteSubscriptionForm(subscription);
+  }
+
+  #handleConfirmDelete(subscriptionId) {
+    try {
       this.#subscriptionModel.removeSubscription(subscriptionId);
+      this.#hideDeleteForm();
+    } catch (error) {
+      alert('Ошибка при удалении подписки: ' + error.message);
     }
   }
 
@@ -95,6 +104,10 @@ export default class SubscriptionsPresenter {
     this.#hideEditForm();
   }
 
+  #handleDeleteFormCancel() {
+    this.#hideDeleteForm();
+  }
+
   #showEditSubscriptionForm(subscription) {
     if (this.#editSubscriptionFormComponent) {
       this.#hideEditForm();
@@ -110,11 +123,34 @@ export default class SubscriptionsPresenter {
     this.#editSubscriptionFormComponent.show();
   }
 
+  #showDeleteSubscriptionForm(subscription) {
+    if (this.#deleteSubscriptionFormComponent) {
+      this.#hideDeleteForm();
+    }
+
+    this.#deleteSubscriptionFormComponent = new DeleteSubscriptionFormComponent({
+      subscription: subscription,
+      onFormSubmit: this.#handleConfirmDelete.bind(this),
+      onFormCancel: this.#handleDeleteFormCancel.bind(this)
+    });
+    
+    render(this.#deleteSubscriptionFormComponent, document.body);
+    this.#deleteSubscriptionFormComponent.show();
+  }
+
   #hideEditForm() {
     if (this.#editSubscriptionFormComponent) {
       this.#editSubscriptionFormComponent.hide();
       this.#editSubscriptionFormComponent.removeElement();
       this.#editSubscriptionFormComponent = null;
+    }
+  }
+
+  #hideDeleteForm() {
+    if (this.#deleteSubscriptionFormComponent) {
+      this.#deleteSubscriptionFormComponent.hide();
+      this.#deleteSubscriptionFormComponent.removeElement();
+      this.#deleteSubscriptionFormComponent = null;
     }
   }
 

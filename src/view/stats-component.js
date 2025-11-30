@@ -18,10 +18,6 @@ function createStatsComponentTemplate(stats) {
         <div class="stat-label">Общая стоимость:</div>
         <div class="stat-value">${totalCost}</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-label">Экономия:</div>
-        <div class="stat-value">${savings}</div>
-      </div>
     </div>`
   );
 }
@@ -31,8 +27,7 @@ export default class StatsComponent extends AbstractComponent {
     super();
     this.stats = stats || {
       totalSubscriptions: 0,
-      totalCost: '0 ₽/мес',
-      savings: '0 ₽/мес'
+      totalCost: '0 ₽/мес'
     };
   }
 

@@ -7,7 +7,7 @@ function createEditSubscriptionFormComponentTemplate(subscription) {
     return (
         `<div class="edit-subscription-form">
             <div class="form-content">
-                <h3>✏️ Редактировать подписку</h3>
+                <h3>Редактировать подписку</h3>
                 <form class="subscription-form">
                     <div class="form-group">
                         <input type="text" placeholder="Название подписки *" required class="form-input" name="name" value="${name}">
@@ -38,8 +38,8 @@ function createEditSubscriptionFormComponentTemplate(subscription) {
                     </div>
                     
                     <div class="form-buttons">
-                        <button type="submit" class="submit-btn">💾 Сохранить</button>
-                        <button type="button" class="cancel-btn">❌ Отмена</button>
+                        <button type="submit" class="submit-btn">Сохранить</button>
+                        <button type="button" class="cancel-btn">Отмена</button>
                     </div>
                 </form>
             </div>

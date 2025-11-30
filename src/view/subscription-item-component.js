@@ -13,8 +13,8 @@ function createSubscriptionItemComponentTemplate(subscription) {
             <div class="sub-footer">
                 <div class="sub-type">${type}</div>
                 <div class="sub-actions">
-                    <button class="edit-btn" type="button" title="Редактировать">✏️</button>
-                    <button class="delete-btn" type="button" title="Удалить">🗑️</button>
+                    <button class="edit-btn" type="button" title="Редактировать"></button>
+                    <button class="delete-btn" type="button" title="Удалить"></button>
                 </div>
             </div>
             <div class="sub-due">${due}</div>

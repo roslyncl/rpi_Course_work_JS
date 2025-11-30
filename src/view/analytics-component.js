@@ -2,12 +2,9 @@
 import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createAnalyticsComponentTemplate(analytics) {
-  // Добавляем проверки и значения по умолчанию
   const categories = analytics?.categories || [];
   const totalCost = analytics?.totalCost || '2 450 ₽';
   const yearlyCost = analytics?.yearlyCost || '29 400 ₽';
-  const savings = analytics?.savings || '-1800 ₽';
-  const budgetPercentage = analytics?.budgetPercentage || '18%';
   
   const pieSlices = generatePieSlices(categories);
   
@@ -45,12 +42,12 @@ function createAnalyticsComponentTemplate(analytics) {
             <div class="stat-label">В год</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value highlight">${savings}</div>
-            <div class="stat-label">Экономия с альтернативами</div>
+            <div class="stat-value">${categories.length}</div>
+            <div class="stat-label">Категорий</div>
           </div>
           <div class="analytics-stat-item">
-            <div class="stat-value">${budgetPercentage}</div>
-            <div class="stat-label">От общего бюджета</div>
+            <div class="stat-value">${categories.reduce((sum, cat) => sum + cat.count, 0)}</div>
+            <div class="stat-label">Всего подписок</div>
           </div>
         </div>
       </div>
@@ -98,9 +95,7 @@ export default class AnalyticsComponent extends AbstractComponent {
     this.analytics = analytics || {
       categories: [],
       totalCost: '2 450 ₽',
-      yearlyCost: '29 400 ₽',
-      savings: '-1800 ₽',
-      budgetPercentage: '18%'
+      yearlyCost: '29 400 ₽'
     };
   }
 

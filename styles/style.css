@@ -229,8 +229,11 @@ main {
 }
 
 .horizontal-blocks {
-    display: flex;
-    gap: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px; 
+  margin: 40px 0; 
+  padding: 0 10px;
 }
 
 .notifications-section {
@@ -763,7 +766,7 @@ main {
 .add-subscription-form .submit-btn {
   flex: 1;
   padding: 12px 20px;
-  background: #48bb78;
+  background: #8b5cf6;
   color: white;
   border: none;
   border-radius: 8px;
@@ -773,7 +776,7 @@ main {
 }
 
 .add-subscription-form .submit-btn:hover {
-  background: #38a169;
+  background: #8b5cf6;
 }
 
 .add-subscription-form .cancel-btn {
@@ -858,7 +861,7 @@ main {
 .edit-subscription-form .submit-btn {
   flex: 1;
   padding: 12px 20px;
-  background: #4299e1;
+  background: #8b5cf6;
   color: white;
   border: none;
   border-radius: 8px;
@@ -868,7 +871,7 @@ main {
 }
 
 .edit-subscription-form .submit-btn:hover {
-  background: #3182ce;
+  background: #8b5cf6;
 }
 
 .edit-subscription-form .cancel-btn {
@@ -887,15 +890,213 @@ main {
   background: #c53030;
 }
 
-/* Адаптивность для мобильных */
-@media (max-width: 480px) {
-  .edit-subscription-form .form-content {
-    padding: 20px;
-    margin: 20px;
-    width: calc(100% - 40px);
-  }
-  
-  .edit-subscription-form .form-buttons {
-    flex-direction: column;
-  }
+
+.hidden { display: none !important; }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  min-width: 450px;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.5em;
+}
+
+.subscription-form input, 
+.subscription-form select {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.subscription-form input:focus, 
+.subscription-form select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.form-actions button[type="submit"] {
+  background: #8b5cf6;
+  color: white;
+}
+
+.form-actions button[type="submit"]:hover {
+  background: #8b5cf6;
+}
+
+.form-actions .cancel-btn {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.form-actions .cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+/* Стили для формы удаления */
+.delete-confirmation {
+  text-align: center;
+}
+
+.delete-confirmation p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+.subscription-details {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-item span:first-child {
+  font-weight: 500;
+  color: #666;
+}
+
+.detail-item span:last-child {
+  color: #333;
+  font-weight: 600;
+}
+
+.delete-button {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+.delete-button:hover {
+  background: #d32f2f !important;
+}
+
+/* Стили для срочных платежей */
+.subscription-due.urgent {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.subscription-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.subscription-actions button {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.subscription-actions button:hover {
+  background: #f5f5f5;
+  transform: scale(1.05);
+}
+
+.delete-btn:hover {
+  background: #ffebee !important;
+  border-color: #f44336 !important;
+}
+
+.edit-btn {
+  color: #8b5cf6;
+  border-color: #e2e8f0;
+}
+
+.edit-btn:hover {
+  background: #f8f7ff;
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+
+/* Кнопка удаления */
+.delete-btn {
+  color: #ef4444;
+  border-color: #e2e8f0;
+}
+
+.delete-btn:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* SVG иконки */
+.icon {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.subscription-actions button:hover .icon {
+  transform: scale(1.1);
+}
+
+/* Альтернативный вариант с эмодзи (если SVG не работает) */
+.subscription-actions button::before {
+  font-size: 16px;
+}
+
+.edit-btn::before {
+  content: "✎";
+}
+
+.delete-btn::before {
+  content: "🗑";
 }

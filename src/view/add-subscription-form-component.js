@@ -5,7 +5,7 @@ function createAddSubscriptionFormComponentTemplate() {
     return (
         `<div class="add-subscription-form">
             <div class="form-content">
-                <h3>➕ Добавить подписку</h3>
+                <h3>Добавить подписку</h3>
                 <form class="subscription-form">
                     <div class="form-group">
                         <input type="text" placeholder="Название подписки *" required class="form-input" name="name">
@@ -36,8 +36,8 @@ function createAddSubscriptionFormComponentTemplate() {
                     </div>
                     
                     <div class="form-buttons">
-                        <button type="submit" class="submit-btn">✅ Добавить</button>
-                        <button type="button" class="cancel-btn">❌ Отмена</button>
+                        <button type="submit" class="submit-btn">Добавить</button>
+                        <button type="button" class="cancel-btn">Отмена</button>
                     </div>
                 </form>
             </div>
