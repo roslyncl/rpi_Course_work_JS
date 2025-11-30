@@ -248,6 +248,31 @@ export default class SubscriptionModel {
     return newSubscription;
   }
 
+  // src/model/model.js - добавим метод updateSubscription
+
+  // В класс SubscriptionModel добавляем:
+  updateSubscription(subscriptionId, updatedData) {
+      const subscriptionIndex = this.#subscriptions.findIndex(sub => sub.id === subscriptionId);
+      
+      if (subscriptionIndex === -1) {
+          throw new Error('Подписка не найдена');
+      }
+
+      // Обновляем данные подписки
+      this.#subscriptions[subscriptionIndex] = {
+          ...this.#subscriptions[subscriptionIndex],
+          ...updatedData,
+          priceValue: parseInt(updatedData.price),
+          price: this.#formatCurrency(parseInt(updatedData.price)),
+          daysUntil: parseInt(updatedData.daysUntil) || 30,
+          due: this.#formatDueText(parseInt(updatedData.daysUntil) || 30),
+          nextPaymentDate: this.#calculateNextPaymentDate(parseInt(updatedData.daysUntil) || 30)
+      };
+
+      this.#updateAllData();
+      return this.#subscriptions[subscriptionIndex];
+  }
+
   removeSubscription(subscriptionId) {
     const index = this.#subscriptions.findIndex(sub => sub.id === subscriptionId);
     if (index !== -1) {

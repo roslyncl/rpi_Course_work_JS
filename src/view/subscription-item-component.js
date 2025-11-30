@@ -38,16 +38,24 @@ export default class SubscriptionItemComponent extends AbstractComponent {
         this.setEventListeners();
     }
 
+    // В subscription-item-component.js убедимся, что обработчик установлен правильно
     setEventListeners() {
         const editBtn = this.element.querySelector('.edit-btn');
         const deleteBtn = this.element.querySelector('.delete-btn');
         
         if (editBtn && this.onEdit) {
-            editBtn.addEventListener('click', () => this.onEdit(this.subscription));
+            editBtn.addEventListener('click', (evt) => {
+                evt.stopPropagation(); // Предотвращаем всплытие события
+                this.onEdit(this.subscription);
+            });
         }
         
         if (deleteBtn && this.onDelete) {
-            deleteBtn.addEventListener('click', () => this.onDelete(this.subscription.id));
+            deleteBtn.addEventListener('click', (evt) => {
+                evt.stopPropagation(); // Предотвращаем всплытие события
+                this.onDelete(this.subscription.id);
+            });
         }
     }
+    
 }

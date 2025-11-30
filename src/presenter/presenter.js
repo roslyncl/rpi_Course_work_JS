@@ -10,6 +10,7 @@ import RecommendationsListComponent from '../view/recommendations-list-component
 import RecommendationItemComponent from '../view/recommendation-item-component.js';
 import AnalyticsComponent from '../view/analytics-component.js';
 import AddSubscriptionFormComponent from '../view/add-subscription-form-component.js';
+import EditSubscriptionFormComponent from '../view/edit-subscription-form-component.js';
 import { render } from '../framework/render.js';
 
 export default class SubscriptionPresenter {
@@ -23,6 +24,7 @@ export default class SubscriptionPresenter {
   };
   #subscriptionsListComponent = null;
   #addSubscriptionFormComponent = null;
+  #editSubscriptionFormComponent = null;
 
   constructor({ 
     headerContainer, 
@@ -162,11 +164,11 @@ export default class SubscriptionPresenter {
 
   renderAddSubscriptionForm() {
     this.#addSubscriptionFormComponent = new AddSubscriptionFormComponent({
-        onFormSubmit: this.handleAddSubscription.bind(this),
-        onFormCancel: this.handleFormCancel.bind(this)
+      onFormSubmit: this.handleAddSubscription.bind(this),
+      onFormCancel: this.handleFormCancel.bind(this)
     });
     
-    // Рендерим форму прямо в body
+    // Рендерим форму прямо в body, чтобы она была поверх всего
     render(this.#addSubscriptionFormComponent, document.body);
     this.#addSubscriptionFormComponent.hide();
   }
@@ -208,9 +210,34 @@ export default class SubscriptionPresenter {
   }
 
   handleEditSubscription(subscription) {
-    // TODO: Реализовать редактирование
     console.log('Редактирование подписки:', subscription);
-    alert(`Редактирование подписки "${subscription.name}" будет реализовано позже`);
+    this.showEditSubscriptionForm(subscription);
+  }
+
+  handleUpdateSubscription(subscriptionId, updatedData) {
+    try {
+      const updatedSubscription = this.#subscriptionModel.updateSubscription(subscriptionId, updatedData);
+      console.log('✅ Подписка обновлена:', updatedSubscription);
+      
+      // Скрываем форму редактирования
+      this.#editSubscriptionFormComponent.hide();
+      this.#editSubscriptionFormComponent.removeElement();
+      this.#editSubscriptionFormComponent = null;
+      
+      // Перерисовываем всё
+      this.rerenderAll();
+      
+    } catch (error) {
+      alert('Ошибка при обновлении подписки: ' + error.message);
+    }
+  }
+
+  handleEditFormCancel() {
+    if (this.#editSubscriptionFormComponent) {
+      this.#editSubscriptionFormComponent.hide();
+      this.#editSubscriptionFormComponent.removeElement();
+      this.#editSubscriptionFormComponent = null;
+    }
   }
 
   setupEventHandlers() {
@@ -278,6 +305,25 @@ export default class SubscriptionPresenter {
 
   showAddSubscriptionForm() {
     this.#addSubscriptionFormComponent.show();
+  }
+
+  showEditSubscriptionForm(subscription) {
+    // Если форма уже открыта, закрываем её
+    if (this.#editSubscriptionFormComponent) {
+      this.#editSubscriptionFormComponent.hide();
+      this.#editSubscriptionFormComponent.removeElement();
+    }
+
+    // Создаем новую форму редактирования
+    this.#editSubscriptionFormComponent = new EditSubscriptionFormComponent({
+      subscription: subscription,
+      onFormSubmit: this.handleUpdateSubscription.bind(this),
+      onFormCancel: this.handleEditFormCancel.bind(this)
+    });
+    
+    // Рендерим форму в body
+    render(this.#editSubscriptionFormComponent, document.body);
+    this.#editSubscriptionFormComponent.show();
   }
 
   rerenderSubscriptions() {
