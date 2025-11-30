@@ -1,6 +1,10 @@
 // src/model/subscription-model.js
 export default class SubscriptionModel {
   #subscriptions = [];
+  #filters = {
+    types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
+    maxPrice: 5000
+  };
   #observers = [];
 
   constructor(initialSubscriptions = []) {
@@ -13,8 +17,8 @@ export default class SubscriptionModel {
     return subscriptionsData.map(sub => ({
       ...sub,
       priceValue: parseInt(sub.price.replace(/\s₽|\D/g, '')),
-      daysUntil: parseInt(sub.due.match(/\d+/)[0]),
-      nextPaymentDate: this.#calculateNextPaymentDate(parseInt(sub.due.match(/\d+/)[0])),
+      daysUntil: parseInt(sub.due.match(/\d+/)?.[0]) || 30,
+      nextPaymentDate: this.#calculateNextPaymentDate(parseInt(sub.due.match(/\d+/)?.[0]) || 30),
       status: 'active'
     }));
   }
@@ -60,6 +64,15 @@ export default class SubscriptionModel {
   // Публичные методы
   get subscriptions() {
     return this.#subscriptions;
+  }
+
+  setFilters(filters) {
+    this.#filters = { ...this.#filters, ...filters };
+    this._notifyObservers();
+  }
+
+  getSubscriptions() {
+    return this.filterSubscriptions(this.#filters);
   }
 
   addSubscription(subscriptionData) {

@@ -1,12 +1,11 @@
 // src/presenter/main-presenter.js
 import HeaderComponent from '../view/header-component.js';
-import FiltersComponent from '../view/filters-component.js';
-import StatsComponent from '../view/stats-component.js';
-import SubscriptionsListComponent from '../view/subscriptions-list-component.js';
-import NotificationsListComponent from '../view/notifications-list-component.js';
-import RecommendationsListComponent from '../view/recommendations-list-component.js';
-import AnalyticsComponent from '../view/analytics-component.js';
-import AddSubscriptionFormComponent from '../view/add-subscription-form-component.js';
+import FiltersPresenter from './filters-presenter.js';
+import StatsPresenter from './stats-presenter.js';
+import SubscriptionsPresenter from './subscriptions-presenter.js';
+import NotificationsPresenter from './notifications-presenter.js';
+import RecommendationsPresenter from './recommendations-presenter.js';
+import AnalyticsPresenter from './analytics-presenter.js';
 import { render } from '../framework/render.js';
 
 export default class MainPresenter {
@@ -14,14 +13,6 @@ export default class MainPresenter {
   #sidebarContainer = null;
   #mainContentContainer = null;
   #subscriptionModel = null;
-
-  #subscriptionsPresenter = null;
-  #filtersPresenter = null;
-  #statsPresenter = null;
-  #notificationsPresenter = null;
-  #recommendationsPresenter = null;
-  #analyticsPresenter = null;
-  #formPresenter = null;
 
   constructor({ 
     headerContainer, 
@@ -49,27 +40,30 @@ export default class MainPresenter {
   }
 
   #renderSidebar() {
-    this.#filtersPresenter = new FiltersPresenter({
+    // Рендерим фильтры
+    const filtersPresenter = new FiltersPresenter({
       container: this.#sidebarContainer,
       subscriptionModel: this.#subscriptionModel
     });
-    this.#filtersPresenter.init();
+    filtersPresenter.init();
 
-    this.#statsPresenter = new StatsPresenter({
+    // Рендерим статистику
+    const statsPresenter = new StatsPresenter({
       container: this.#sidebarContainer,
       subscriptionModel: this.#subscriptionModel
     });
-    this.#statsPresenter.init();
+    statsPresenter.init();
   }
 
   #renderMainContent() {
     this.#mainContentContainer.innerHTML = '';
     
-    this.#subscriptionsPresenter = new SubscriptionsPresenter({
+    // Рендерим подписки
+    const subscriptionsPresenter = new SubscriptionsPresenter({
       container: this.#mainContentContainer,
       subscriptionModel: this.#subscriptionModel
     });
-    this.#subscriptionsPresenter.init();
+    subscriptionsPresenter.init();
 
     this.#renderHorizontalBlocks();
     this.#renderAnalytics();
@@ -80,17 +74,19 @@ export default class MainPresenter {
     horizontalBlocksContainer.className = 'horizontal-blocks';
     this.#mainContentContainer.appendChild(horizontalBlocksContainer);
 
-    this.#notificationsPresenter = new NotificationsPresenter({
+    // Рендерим уведомления
+    const notificationsPresenter = new NotificationsPresenter({
       container: horizontalBlocksContainer,
       subscriptionModel: this.#subscriptionModel
     });
-    this.#notificationsPresenter.init();
+    notificationsPresenter.init();
 
-    this.#recommendationsPresenter = new RecommendationsPresenter({
+    // Рендерим рекомендации
+    const recommendationsPresenter = new RecommendationsPresenter({
       container: horizontalBlocksContainer,
       subscriptionModel: this.#subscriptionModel
     });
-    this.#recommendationsPresenter.init();
+    recommendationsPresenter.init();
   }
 
   #renderAnalytics() {
@@ -98,11 +94,11 @@ export default class MainPresenter {
     analyticsSection.className = 'analytics-section';
     this.#mainContentContainer.appendChild(analyticsSection);
 
-    this.#analyticsPresenter = new AnalyticsPresenter({
+    const analyticsPresenter = new AnalyticsPresenter({
       container: analyticsSection,
       subscriptionModel: this.#subscriptionModel
     });
-    this.#analyticsPresenter.init();
+    analyticsPresenter.init();
   }
 
   #handleModelChange() {
