@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createSubscriptionItemComponentTemplate(subscription) {
     const { id, name, price, details, type, due } = subscription;
@@ -13,8 +13,8 @@ function createSubscriptionItemComponentTemplate(subscription) {
             <div class="sub-footer">
                 <div class="sub-type">${type}</div>
                 <div class="sub-actions">
-                    <button class="edit-btn" title="Редактировать">✏️</button>
-                    <button class="delete-btn" title="Удалить">🗑️</button>
+                    <button class="edit-btn" type="button" title="Редактировать">✏️</button>
+                    <button class="delete-btn" type="button" title="Удалить">🗑️</button>
                 </div>
             </div>
             <div class="sub-due">${due}</div>
@@ -22,26 +22,23 @@ function createSubscriptionItemComponentTemplate(subscription) {
     );
 }
 
-export default class SubscriptionItemComponent {
+export default class SubscriptionItemComponent extends AbstractComponent {
     constructor({ subscription, onEdit = null, onDelete = null }) {
+        super();
         this.subscription = subscription;
         this.onEdit = onEdit;
         this.onDelete = onDelete;
     }
 
-    getTemplate() {
+    get template() {
         return createSubscriptionItemComponentTemplate(this.subscription);
     }
 
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-            this.#setEventListeners();
-        }
-        return this.element;
+    afterElementCreate() {
+        this.setEventListeners();
     }
 
-    #setEventListeners() {
+    setEventListeners() {
         const editBtn = this.element.querySelector('.edit-btn');
         const deleteBtn = this.element.querySelector('.delete-btn');
         
@@ -52,9 +49,5 @@ export default class SubscriptionItemComponent {
         if (deleteBtn && this.onDelete) {
             deleteBtn.addEventListener('click', () => this.onDelete(this.subscription.id));
         }
-    }
-
-    removeElement() {
-        this.element = null;
     }
 }

@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createStatsComponentTemplate(stats) {
   
@@ -21,23 +21,13 @@ function createStatsComponentTemplate(stats) {
   );
 }
 
-export default class StatsComponent {
+export default class StatsComponent extends AbstractComponent {
   constructor({ stats }) {
+    super();
     this.stats = stats;
   }
 
-  getTemplate() {
+  get template() { 
     return createStatsComponentTemplate(this.stats);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

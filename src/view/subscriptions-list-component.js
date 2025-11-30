@@ -1,6 +1,6 @@
-import { createElement } from '../framework/render.js';
 import AddSubscriptionBtnComponent from './add-subscription-btn-component.js';
-import { render } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
+import { render } from "../framework/render.js";
 
 function createSubscriptionsListComponentTemplate() {
     return (
@@ -14,26 +14,25 @@ function createSubscriptionsListComponentTemplate() {
     );
 }
 
-export default class SubscriptionsListComponent {
-    getTemplate() {
+export default class SubscriptionsListComponent extends AbstractComponent {
+    constructor() {
+        super();
+        this.addButtonComponent = null;
+    }
+
+    get template() {
         return createSubscriptionsListComponentTemplate();
     }
 
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-            this.renderAddButton();
-        }
-        return this.element;
+    afterElementCreate() {
+        this.renderAddButton();
     }
 
     renderAddButton() {
         const addButtonContainer = this.element.querySelector('.add-btn-container');
-        const addButtonComponent = new AddSubscriptionBtnComponent();
-        render(addButtonComponent, addButtonContainer);
-    }
-
-    removeElement() {
-        this.element = null;
+        if (addButtonContainer && !this.addButtonComponent) {
+            this.addButtonComponent = new AddSubscriptionBtnComponent();
+            render(this.addButtonComponent, addButtonContainer);
+        }
     }
 }

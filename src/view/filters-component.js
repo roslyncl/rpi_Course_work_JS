@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createFiltersComponentTemplate() {
     return (
@@ -26,19 +26,8 @@ function createFiltersComponentTemplate() {
     );
 }
 
-export default class FiltersComponent {
-    getTemplate() {
+export default class FiltersComponent extends AbstractComponent {
+    get template() { 
         return createFiltersComponentTemplate();
-    }
-
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-        }
-        return this.element;
-    }
-
-    removeElement() {
-        this.element = null;
     }
 }

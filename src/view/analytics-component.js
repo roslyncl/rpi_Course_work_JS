@@ -1,9 +1,7 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createAnalyticsComponentTemplate(analytics) {
   const { categories, totalCost, yearlyCost, savings, budgetPercentage } = analytics;
-  
-  // Динамически генерируем секции для круговой диаграммы
   const pieSlices = generatePieSlices(categories);
   
   return (
@@ -100,23 +98,13 @@ function getCategoryColor(categoryType, percentage) {
   return color;
 }
 
-export default class AnalyticsComponent {
+export default class AnalyticsComponent extends AbstractComponent {
   constructor({ analytics }) {
+    super();
     this.analytics = analytics;
   }
 
-  getTemplate() {
+  get template() {
     return createAnalyticsComponentTemplate(this.analytics);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

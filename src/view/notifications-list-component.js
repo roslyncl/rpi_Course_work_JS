@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createNotificationsListComponentTemplate() {
     return (
@@ -9,19 +9,8 @@ function createNotificationsListComponentTemplate() {
     );
 }
 
-export default class NotificationsListComponent {
-    getTemplate() {
+export default class NotificationsListComponent extends AbstractComponent {
+    get template() {
         return createNotificationsListComponentTemplate();
-    }
-
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-        }
-        return this.element;
-    }
-
-    removeElement() {
-        this.element = null;
     }
 }

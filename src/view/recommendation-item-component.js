@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createRecommendationItemComponentTemplate(recommendation) {
     const { name, savings, details } = recommendation;
@@ -14,23 +14,13 @@ function createRecommendationItemComponentTemplate(recommendation) {
     );
 }
 
-export default class RecommendationItemComponent {
+export default class RecommendationItemComponent extends AbstractComponent {
     constructor({ recommendation }) {
+        super();
         this.recommendation = recommendation;
     }
 
-    getTemplate() {
+    get template() { 
         return createRecommendationItemComponentTemplate(this.recommendation);
-    }
-
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-        }
-        return this.element;
-    }
-
-    removeElement() {
-        this.element = null;
     }
 }

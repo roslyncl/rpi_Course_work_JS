@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createNotificationItemComponentTemplate(notification) {
     const { title, text } = notification;
@@ -14,23 +14,13 @@ function createNotificationItemComponentTemplate(notification) {
     );
 }
 
-export default class NotificationItemComponent {
+export default class NotificationItemComponent extends AbstractComponent {
     constructor({ notification }) {
+        super();
         this.notification = notification;
     }
 
-    getTemplate() {
+    get template() { 
         return createNotificationItemComponentTemplate(this.notification);
-    }
-
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-        }
-        return this.element;
-    }
-
-    removeElement() {
-        this.element = null;
     }
 }

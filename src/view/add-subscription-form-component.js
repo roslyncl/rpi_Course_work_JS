@@ -1,4 +1,4 @@
-import { createElement } from '../framework/render.js';
+import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createAddSubscriptionFormComponentTemplate() {
     return (
@@ -23,19 +23,8 @@ function createAddSubscriptionFormComponentTemplate() {
     );
 }
 
-export default class AddSubscriptionFormComponent {
-    getTemplate() {
+export default class AddSubscriptionFormComponent extends AbstractComponent {
+    get template() { 
         return createAddSubscriptionFormComponentTemplate();
-    }
-
-    getElement() {
-        if (!this.element) {
-            this.element = createElement(this.getTemplate());
-        }
-        return this.element;
-    }
-
-    removeElement() {
-        this.element = null;
     }
 }
