@@ -44,6 +44,8 @@ export default class MainPresenter {
   }
 
   #renderSidebar() {
+    this.#sidebarContainer.innerHTML = '';
+
     const filtersPresenter = new FiltersPresenter({
       container: this.#sidebarContainer,
       filtersModel: this.#filtersModel
