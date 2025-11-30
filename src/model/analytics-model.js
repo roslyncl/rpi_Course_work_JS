@@ -1,4 +1,3 @@
-// src/model/analytics-model.js
 export default class AnalyticsModel {
   #analytics = {};
   #observers = [];
@@ -67,7 +66,6 @@ export default class AnalyticsModel {
     }).format(amount).replace(',00', '');
   }
 
-  // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);
   }

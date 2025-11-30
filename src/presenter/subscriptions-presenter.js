@@ -1,4 +1,3 @@
-// src/presenter/subscriptions-presenter.js
 import SubscriptionsListComponent from '../view/subscriptions-list-component.js';
 import SubscriptionItemComponent from '../view/subscription-item-component.js';
 import AddSubscriptionFormComponent from '../view/add-subscription-form-component.js';

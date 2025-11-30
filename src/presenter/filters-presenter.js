@@ -1,4 +1,3 @@
-// src/presenter/filters-presenter.js
 import FiltersComponent from '../view/filters-component.js';
 import { render } from '../framework/render.js';
 
@@ -29,28 +28,24 @@ export default class FiltersPresenter {
   }
 
   #setupFilterHandlers() {
-    // Делегирование событий для чекбоксов
     this.#container.addEventListener('change', (e) => {
       if (e.target.type === 'checkbox') {
         this.#updateTypeFilters();
       }
     });
 
-    // Обработчик для слайдера цены
     const priceSlider = this.#container.querySelector('input[type="range"]');
     if (priceSlider) {
       priceSlider.addEventListener('input', (e) => {
         const maxPrice = parseInt(e.target.value);
         this.#filtersModel.setFilters({ maxPrice });
         
-        // Обновляем отображение максимальной цены
         const maxValueElement = this.#container.querySelector('.max-value');
         if (maxValueElement) {
           maxValueElement.textContent = `${maxPrice.toLocaleString('ru-RU')} ₽`;
         }
       });
 
-      // Инициализация начального значения
       this.#updatePriceDisplay();
     }
   }

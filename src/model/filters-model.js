@@ -1,4 +1,3 @@
-// src/model/filters-model.js
 export default class FiltersModel {
   #filters = {
     types: ['Стриминг', 'Музыка', 'ПО', 'Видео', 'Игры', 'Другое'],
@@ -25,7 +24,6 @@ export default class FiltersModel {
     this.#notifyObservers();
   }
 
-  // Метод для применения фильтров к массиву подписок
   applyFilters(subscriptions) {
     return subscriptions.filter(subscription => {
       const matchesType = this.#filters.types.includes(subscription.type);
@@ -42,7 +40,6 @@ export default class FiltersModel {
     return this.#filters.maxPrice;
   }
 
-  // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);
   }

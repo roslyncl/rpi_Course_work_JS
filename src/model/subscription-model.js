@@ -1,4 +1,3 @@
-// src/model/subscription-model.js
 export default class SubscriptionModel {
   #subscriptions = [];
   #filtersModel = null;
@@ -8,14 +7,12 @@ export default class SubscriptionModel {
     this.#filtersModel = filtersModel;
     this.#subscriptions = this.#parseSubscriptions(initialSubscriptions);
     this.#updateAllData();
-    
-    // Подписываемся на изменения фильтров
+
     if (this.#filtersModel) {
       this.#filtersModel.addObserver(() => this.#onFiltersChange());
     }
   }
 
-  // Преобразуем моковые данные в рабочий формат
   #parseSubscriptions(subscriptionsData) {
     return subscriptionsData.map(sub => ({
       ...sub,
@@ -65,13 +62,10 @@ export default class SubscriptionModel {
   }
 
   #onFiltersChange() {
-    // При изменении фильтров уведомляем наблюдателей
     this._notifyObservers();
   }
 
-  // Публичные методы
   get subscriptions() {
-    // Если есть модель фильтров, используем её для фильтрации
     if (this.#filtersModel) {
       return this.#filtersModel.applyFilters(this.#subscriptions);
     }
@@ -79,11 +73,9 @@ export default class SubscriptionModel {
   }
 
   get allSubscriptions() {
-    // Все подписки без фильтрации
     return this.#subscriptions;
   }
 
-  // Для обратной совместимости
   setFilters(filters) {
     if (this.#filtersModel) {
       this.#filtersModel.setFilters(filters);
@@ -142,7 +134,6 @@ export default class SubscriptionModel {
     return false;
   }
 
-  // Метод для обратной совместимости
   filterSubscriptions(filters = {}) {
     if (Object.keys(filters).length === 0) {
       return this.subscriptions;
@@ -171,7 +162,6 @@ export default class SubscriptionModel {
     return [...new Set(this.#subscriptions.map(sub => sub.type))];
   }
 
-  // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);
   }

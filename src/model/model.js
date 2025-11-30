@@ -1,4 +1,3 @@
-// src/model/model.js
 import SubscriptionModel from './subscription-model.js';
 import NotificationModel from './notification-model.js';
 import StatsModel from './stats-model.js';
@@ -29,7 +28,6 @@ export default class MainModel {
   }
 
   #initModels() {
-    // Передаем filtersModel в subscriptionModel
     this.#subscriptionModel = new SubscriptionModel(initialSubscriptions, this.#filtersModel);
     this.#notificationModel = new NotificationModel(initialNotifications);
     this.#statsModel = new StatsModel(initialStats);
@@ -41,7 +39,6 @@ export default class MainModel {
 
   #setupObservers() {
     this.#subscriptionModel.addObserver(() => this.#onSubscriptionsChange());
-    // Добавляем наблюдатель для фильтров
     if (this.#filtersModel) {
       this.#filtersModel.addObserver(() => this.#onFiltersChange());
     }
@@ -60,7 +57,6 @@ export default class MainModel {
   }
 
   #onFiltersChange() {
-    // При изменении фильтров уведомляем наблюдателей
     this._notifyObservers();
   }
 
@@ -72,9 +68,6 @@ export default class MainModel {
     this.#recommendationModel.updateRecommendations(subscriptions);
   }
 
-  // === PUBLIC API ===
-
-  // Subscription methods
   addSubscription(subscriptionData) {
     return this.#subscriptionModel.addSubscription(subscriptionData);
   }
@@ -88,11 +81,9 @@ export default class MainModel {
   }
 
   getSubscriptions(filters = {}) {
-    // Используем встроенную фильтрацию через subscriptionModel
     return this.#subscriptionModel.subscriptions;
   }
 
-  // Filters methods
   setFilters(filters) {
     if (this.#filtersModel) {
       this.#filtersModel.setFilters(filters);
@@ -106,7 +97,6 @@ export default class MainModel {
     };
   }
 
-  // Getters
   getNotifications() { 
     return this.#notificationModel.notifications; 
   }
@@ -127,7 +117,6 @@ export default class MainModel {
     return this.#filtersModel;
   }
 
-  // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);
   }

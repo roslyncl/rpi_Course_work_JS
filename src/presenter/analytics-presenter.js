@@ -1,4 +1,3 @@
-// src/presenter/analytics-presenter.js
 import AnalyticsComponent from '../view/analytics-component.js';
 import { render } from '../framework/render.js';
 

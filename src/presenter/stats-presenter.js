@@ -1,4 +1,3 @@
-// src/presenter/stats-presenter.js
 import StatsComponent from '../view/stats-component.js';
 import { render } from '../framework/render.js';
 

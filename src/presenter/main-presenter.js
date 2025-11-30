@@ -1,4 +1,3 @@
-// src/presenter/main-presenter.js
 import HeaderComponent from '../view/header-component.js';
 import FiltersPresenter from './filters-presenter.js';
 import StatsPresenter from './stats-presenter.js';
@@ -29,7 +28,6 @@ export default class MainPresenter {
     this.#filtersModel = filtersModel;
 
     this.#subscriptionModel.addObserver(this.#handleModelChange.bind(this));
-    // Добавляем наблюдатель для фильтров
     this.#filtersModel.addObserver(this.#handleModelChange.bind(this));
   }
 
@@ -45,14 +43,12 @@ export default class MainPresenter {
   }
 
   #renderSidebar() {
-    // Рендерим фильтры
     const filtersPresenter = new FiltersPresenter({
       container: this.#sidebarContainer,
       filtersModel: this.#filtersModel
     });
     filtersPresenter.init();
 
-    // Рендерим статистику
     const statsPresenter = new StatsPresenter({
       container: this.#sidebarContainer,
       subscriptionModel: this.#subscriptionModel
@@ -63,7 +59,6 @@ export default class MainPresenter {
   #renderMainContent() {
     this.#mainContentContainer.innerHTML = '';
     
-    // Рендерим подписки
     const subscriptionsPresenter = new SubscriptionsPresenter({
       container: this.#mainContentContainer,
       subscriptionModel: this.#subscriptionModel
@@ -79,14 +74,12 @@ export default class MainPresenter {
     horizontalBlocksContainer.className = 'horizontal-blocks';
     this.#mainContentContainer.appendChild(horizontalBlocksContainer);
 
-    // Рендерим уведомления
     const notificationsPresenter = new NotificationsPresenter({
       container: horizontalBlocksContainer,
       subscriptionModel: this.#subscriptionModel
     });
     notificationsPresenter.init();
 
-    // Рендерим рекомендации
     const recommendationsPresenter = new RecommendationsPresenter({
       container: horizontalBlocksContainer,
       subscriptionModel: this.#subscriptionModel
@@ -106,8 +99,7 @@ export default class MainPresenter {
     analyticsPresenter.init();
   }
 
-  #handleModelChange() {
-    // Перерисовываем контент при любых изменениях модели
+  #handleModelChange() {и
     this.#renderMainContent();
   }
 }

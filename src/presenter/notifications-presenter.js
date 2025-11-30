@@ -1,5 +1,3 @@
-// src/presenter/notifications-presenter.js
-import NotificationsListComponent from '../view/notifications-list-component.js';
 import NotificationItemComponent from '../view/notification-item-component.js';
 import { render } from '../framework/render.js';
 

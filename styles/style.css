@@ -536,7 +536,6 @@ main {
     max-width: 300px;
 }
 
-/* Стили для формы добавления подписки */
 .add-subscription-form-overlay {
     position: fixed;
     top: 0;
@@ -709,9 +708,6 @@ main {
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
-
-
-/* Стили для формы добавления подписки */
 .add-subscription-form {
   position: fixed;
   top: 0;
@@ -806,7 +802,6 @@ main {
   background: #c53030;
 }
 
-/* Стили для формы редактирования подписки */
 .edit-subscription-form {
   position: fixed;
   top: 0;
@@ -982,7 +977,6 @@ main {
   background: #e0e0e0;
 }
 
-/* Стили для формы удаления */
 .delete-confirmation {
   text-align: center;
 }
@@ -1032,7 +1026,6 @@ main {
   background: #d32f2f !important;
 }
 
-/* Стили для срочных платежей */
 .subscription-due.urgent {
   color: #f44336;
   font-weight: bold;
@@ -1074,8 +1067,6 @@ main {
   box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
 }
 
-
-/* Кнопка удаления */
 .delete-btn {
   color: #ef4444;
   border-color: #e2e8f0;
@@ -1088,18 +1079,6 @@ main {
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
-/* SVG иконки */
-.icon {
-  width: 18px;
-  height: 18px;
-  transition: transform 0.2s ease;
-}
-
-.subscription-actions button:hover .icon {
-  transform: scale(1.1);
-}
-
-/* Альтернативный вариант с эмодзи (если SVG не работает) */
 .subscription-actions button::before {
   font-size: 16px;
 }
@@ -1112,45 +1091,6 @@ main {
   content: "🗑";
 }
 
-/* Стили для круглых кнопок действий */
-.subscription-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.subscription-actions button {
-  background: white;
-  border: 1.5px solid #f1f5f9;
-  border-radius: 50%; /* Делаем полностью круглыми */
-  padding: 10px; /* Увеличиваем padding */
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px; /* Увеличиваем размер */
-  height: 44px; /* Увеличиваем размер */
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.subscription-actions button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  transition: left 0.5s ease;
-}
-
-.subscription-actions button:hover::before {
-  left: 100%;
-}
-
-/* Кнопка редактирования */
 .edit-btn {
   color: #7c3aed;
   border-color: #e9d5ff;
@@ -1163,7 +1103,6 @@ main {
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.15);
 }
 
-/* Кнопка удаления */
 .delete-btn {
   color: #dc2626;
   border-color: #fecaca;
@@ -1176,27 +1115,18 @@ main {
   box-shadow: 0 6px 20px rgba(220, 38, 38, 0.15);
 }
 
-/* SVG иконки - увеличиваем размер */
 .icon {
-  width: 20px; /* Увеличиваем с 18px до 20px */
-  height: 20px; /* Увеличиваем с 18px до 20px */
+  width: 20px; 
+  height: 20px; 
   transition: all 0.3s ease;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
 
 .subscription-actions button:hover .icon {
-  transform: scale(1.2); /* Увеличиваем эффект при наведении */
+  transform: scale(1.2);
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
 }
 
-/* Альтернативный вариант с эмодзи (если нужен) */
-.subscription-actions button.emoji-btn {
-  font-size: 18px; /* Увеличиваем размер эмодзи */
-}
-
-
-
-/* Стили для рекомендаций с ценами */
 .recommendation-item {
     border: 1px solid #f1f5f9;
     background: #f5f4f5;
@@ -1249,5 +1179,3 @@ main {
     font-size: 14px;
     line-height: 1.4;
 }
-
-

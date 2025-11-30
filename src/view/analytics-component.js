@@ -1,4 +1,3 @@
-// src/view/analytics-component.js
 import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createAnalyticsComponentTemplate(analytics) {

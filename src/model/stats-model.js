@@ -1,4 +1,3 @@
-// src/model/stats-model.js
 export default class StatsModel {
   #stats = {};
   #observers = [];
@@ -41,7 +40,6 @@ export default class StatsModel {
     }).format(amount).replace(',00', '');
   }
 
-  // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);
   }

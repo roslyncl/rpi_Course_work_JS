@@ -1,4 +1,3 @@
-// src/view/delete-subscription-form-component.js
 import { AbstractComponent } from '../framework/view/abstract-component.js';
 
 export default class DeleteSubscriptionFormComponent extends AbstractComponent {

@@ -1,4 +1,3 @@
-// src/model/notification-model.js
 export default class NotificationModel {
   #notifications = [];
   #observers = [];
@@ -30,7 +29,6 @@ export default class NotificationModel {
     return daysUntil <= 7;
   }
 
-  // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);
   }

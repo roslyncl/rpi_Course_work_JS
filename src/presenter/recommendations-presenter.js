@@ -1,5 +1,3 @@
-// src/presenter/recommendations-presenter.js
-import RecommendationsListComponent from '../view/recommendations-list-component.js';
 import RecommendationItemComponent from '../view/recommendation-item-component.js';
 import { render } from '../framework/render.js';
 

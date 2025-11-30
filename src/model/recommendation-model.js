@@ -1,4 +1,3 @@
-// src/model/recommendation-model.js
 export default class RecommendationModel {
   #recommendations = [];
   #observers = [];
@@ -18,7 +17,6 @@ export default class RecommendationModel {
       price: sub.priceValue
     }));
 
-    // Рекомендации по категориям (только платные)
     const recommendationsByCategory = {
       'Стриминг': [
         { name: 'Okko', avoid: ['netflix'], price: 299, details: 'Локальный контент дешевле' },
@@ -51,15 +49,12 @@ export default class RecommendationModel {
       ]
     };
 
-    // Собираем все возможные рекомендации
     const allRecommendations = Object.entries(recommendationsByCategory)
       .flatMap(([category, recs]) => {
-        // Проверяем, есть ли у пользователя подписки этой категории
         const hasCategorySubscriptions = currentSubscriptions.some(sub => sub.type === category);
         
         if (!hasCategorySubscriptions) return [];
 
-        // Фильтруем рекомендации: убираем бесплатные и те, что уже есть у пользователя
         const filteredRecs = recs
           .filter(rec => {
             const shouldAvoid = rec.avoid.some(avoidName =>
@@ -73,9 +68,7 @@ export default class RecommendationModel {
             return !shouldAvoid && !alreadyHas && !isFree;
           });
 
-        // Берем только одну (самую дешевую) рекомендацию для категории
         if (filteredRecs.length > 0) {
-          // Сортируем по цене (от самой дешевой) и берем первую
           const bestRec = filteredRecs
             .sort((a, b) => a.price - b.price)[0];
           
@@ -92,7 +85,6 @@ export default class RecommendationModel {
         return [];
       });
 
-    // Сортируем все рекомендации по цене (от дешевой к дорогой) и берем топ-3
     this.#recommendations = allRecommendations
       .sort((a, b) => a.price - b.price)
       .slice(0, 3);

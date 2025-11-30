@@ -1,4 +1,3 @@
-// src/view/edit-subscription-form-component.js
 import { AbstractComponent } from "../framework/view/abstract-component.js";
 
 function createEditSubscriptionFormComponentTemplate(subscription) {
@@ -78,7 +77,6 @@ export default class EditSubscriptionFormComponent extends AbstractComponent {
             this._callback.formCancel();
         });
 
-        // Закрытие по клику на затемненную область
         this.element.addEventListener('click', (evt) => {
             if (evt.target === this.element) {
                 this._callback.formCancel();
@@ -97,7 +95,6 @@ export default class EditSubscriptionFormComponent extends AbstractComponent {
             daysUntil: parseInt(formData.get('daysUntil')) || 30
         };
 
-        // Валидация
         if (!subscriptionData.name) {
             alert('Введите название подписки');
             return;
