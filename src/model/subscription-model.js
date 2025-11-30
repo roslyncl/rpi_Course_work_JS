@@ -149,6 +149,10 @@ export default class SubscriptionModel {
     }).format(amount).replace(',00', '');
   }
 
+  getCategories() {
+    return [...new Set(this.#subscriptions.map(sub => sub.type))];
+}
+
   // Observer pattern
   addObserver(observer) {
     this.#observers.push(observer);

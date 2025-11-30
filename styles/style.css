@@ -318,6 +318,17 @@ main {
     transition: all 0.2s;
 }
 
+.rec-category {
+    background: #f0edf9;
+    color: #6d5ba6;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .recommendation-item:hover {
     border-color: #e9e6ff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -1100,3 +1111,143 @@ main {
 .delete-btn::before {
   content: "🗑";
 }
+
+/* Стили для круглых кнопок действий */
+.subscription-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.subscription-actions button {
+  background: white;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 50%; /* Делаем полностью круглыми */
+  padding: 10px; /* Увеличиваем padding */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; /* Увеличиваем размер */
+  height: 44px; /* Увеличиваем размер */
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.subscription-actions button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.subscription-actions button:hover::before {
+  left: 100%;
+}
+
+/* Кнопка редактирования */
+.edit-btn {
+  color: #7c3aed;
+  border-color: #e9d5ff;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, #faf5ff, #f3e8ff);
+  border-color: #7c3aed;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.15);
+}
+
+/* Кнопка удаления */
+.delete-btn {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border-color: #dc2626;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.15);
+}
+
+/* SVG иконки - увеличиваем размер */
+.icon {
+  width: 20px; /* Увеличиваем с 18px до 20px */
+  height: 20px; /* Увеличиваем с 18px до 20px */
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.subscription-actions button:hover .icon {
+  transform: scale(1.2); /* Увеличиваем эффект при наведении */
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+/* Альтернативный вариант с эмодзи (если нужен) */
+.subscription-actions button.emoji-btn {
+  font-size: 18px; /* Увеличиваем размер эмодзи */
+}
+
+
+
+/* Стили для рекомендаций с ценами */
+.recommendation-item {
+    border: 1px solid #f1f5f9;
+    background: #f5f4f5;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.recommendation-item:hover {
+    border-color: #e9e6ff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.rec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.rec-category {
+    background: #f0edf9;
+    color: #6d5ba6;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rec-price {
+    background:#f0edf9;
+    color: #6d5ba6;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.rec-name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.rec-details {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+

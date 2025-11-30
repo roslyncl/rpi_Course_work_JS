@@ -41,15 +41,16 @@ export default class MainModel {
   }
 
   #onSubscriptionsChange() {
-    const subscriptions = this.#subscriptionModel.subscriptions;
-    
-    this.#notificationModel.updateNotifications(subscriptions);
-    this.#statsModel.updateStats(subscriptions);
-    this.#analyticsModel.updateAnalytics(subscriptions);
-    this.#recommendationModel.updateRecommendations(subscriptions);
-    
-    this._notifyObservers();
-  }
+  const subscriptions = this.#subscriptionModel.subscriptions;
+  const categories = this.#subscriptionModel.getCategories();
+  
+  this.#notificationModel.updateNotifications(subscriptions);
+  this.#statsModel.updateStats(subscriptions);
+  this.#analyticsModel.updateAnalytics(subscriptions);
+  this.#recommendationModel.updateRecommendations(subscriptions, categories);
+  
+  this._notifyObservers();
+}
 
   #syncAllData() {
     const subscriptions = this.#subscriptionModel.subscriptions;
